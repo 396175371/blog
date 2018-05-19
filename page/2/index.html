@@ -70,14 +70,14 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-nodejs/用-JS-和-Go-来实现中英文简单排版" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-linux/nginx-user-模块详解" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2018/05/20/nodejs/用-JS-和-Go-来实现中英文简单排版/" class="article-date">
-  <time datetime="2018-05-19T22:33:13.000Z" itemprop="datePublished">2018-05-19</time>
+    <a href="/blog/2018/05/20/linux/nginx-user-模块详解/" class="article-date">
+  <time datetime="2018-05-19T22:51:54.000Z" itemprop="datePublished">2018-05-19</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/blog/categories/Node-js/">Node.js</a>
+    <a class="article-category-link" href="/blog/categories/Linux/">Linux</a>
   </div>
 
   </div>
@@ -88,7 +88,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/blog/2018/05/20/nodejs/用-JS-和-Go-来实现中英文简单排版/">用 JS 和 Go 来实现中英文简单排版</a>
+      <a class="article-title" href="/blog/2018/05/20/linux/nginx-user-模块详解/">nginx user 模块详解</a>
     </h1>
   
 
@@ -96,154 +96,95 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>业界最为标准的中英文排版格式，中文和英文之间加空格，中文和数字之间加空格。现在微信（安卓 6.6.2 测试版）已经支持。</p>
-<p><img width="421" alt="2018-01-27 6 45 38" src="https://user-images.githubusercontent.com/24730006/35471319-d05c82ac-0393-11e8-8c54-7b621d2ce4d8.png"></p>
-<p>原理其实这个很简单，就是匹配相连接的中文和英文（包括数字），然后在中间加一个空格即可。接下来用 JS 和 Golang 实现。需要注意的是已经符合排版的就不需要加空格了。</p>
-<p>匹配中文是用的 <code>[\u4e00-\u9fa5]</code>，一般而言的中文就都涵盖。</p>
-<h2 id="Go-实现"><a href="#Go-实现" class="headerlink" title="Go 实现"></a>Go 实现</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"regexp"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    s := <span class="string">"我是渣渣辉，我是zhangjiahui，zhangjiahui 是我"</span></span><br><span class="line">    g1 := regexp.MustCompile(<span class="string">"([\u4e00-\u9fa5])(\\w)"</span>)</span><br><span class="line">    g2 := regexp.MustCompile(<span class="string">"(\\w)([\u4e00-\u9fa5])"</span>)</span><br><span class="line">    s = g2.ReplaceAllString(g1.ReplaceAllString(s, <span class="string">"$1 $2"</span>), <span class="string">"$1 $2"</span>)</span><br><span class="line">    <span class="comment">// 输出："我是渣渣辉，我是 zhangjiahui，zhangjiahui 是我"</span></span><br><span class="line">    fmt.Println(s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="JS-实现"><a href="#JS-实现" class="headerlink" title="JS 实现"></a>JS 实现</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> s = <span class="string">"我是渣渣辉，我是zhangjiahui，zhangjiahui 是我"</span>;</span><br><span class="line"><span class="keyword">const</span> g1 = <span class="regexp">/(\w)([\u4e00-\u9fa5])/g</span>;</span><br><span class="line"><span class="keyword">const</span> g2 = <span class="regexp">/([\u4e00-\u9fa5])(\w)/g</span>;</span><br><span class="line"><span class="comment">// 输出："我是渣渣辉，我是 zhangjiahui，zhangjiahui 是我"</span></span><br><span class="line">s = s.replace(g1,<span class="string">"$1 $2"</span>).replace(g2,<span class="string">"$1 $2"</span>);</span><br></pre></td></tr></table></figure>
-<p>这里需要注意的是大部分常用的中文都可以匹配到，因为超出了 <code>\uffff</code> 所以部分生僻的中文还匹配不到，可以按照需要进行扩增。JS 因为使用 UTF-16 编码，再使用的时候需要再加上 <code>u</code> 修饰符，例如如 <code>/\u{20BB7}/u.test(&#39;𠮷&#39;)</code>。</p>
-<p>原文首发在我的 <a href="https://github.com/isLishude/blog/issues/156" target="_blank" rel="noopener">GitHub 博客</a></p>
-<h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><p>看到一篇文章，<a href="https://zhuanlan.zhihu.com/p/33335629" target="_blank" rel="noopener">JavaScript 正则表达式匹配汉字</a>，这里需要修改一下正则，最近有一个新的 ES 提案中包含了一个 <a href="https://github.com/tc39/proposal-regexp-unicode-property-escapes" target="_blank" rel="noopener">unicode 转义</a>，语法为 <code>\p{…}</code>。Chrome 64 已经支持，兼容处理可以使用<code>@babel/plugin-proposal-unicode-property-regex</code> 和 <code>regexpu-core</code> 。</p>
-<p>所以正则可以修改为 <code>/(\p{Unified_Ideograph})(\w)/gu</code>。</p>
-<p>以前没接触过这个正则语法，Go 是已经支持了这种语法，所以 Go 的正则也需要改成这个。</p>
-<p>不过我尝试了 <code>Unified_Ideograph</code> 这个就报错了，需要修改为 <code>Han</code> 就可以了。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g1 := regexp.MustCompile(<span class="string">"(\\p&#123;Han&#125;)(\\w)"</span>)</span><br><span class="line">g2 := regexp.MustCompile(<span class="string">"(\\w)(\\p&#123;Han&#125;)"</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="更新二"><a href="#更新二" class="headerlink" title="更新二"></a>更新二</h2><p>上述有个问题，<code>\w</code> 匹配任意的字母、数字和<strong>下划线</strong>，相当于<code>[A-Za-z0-9_]</code>。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> g = <span class="regexp">/(\p&#123;Unified_Ideograph&#125;)([A-Za-z0-9])|([A-Za-z0-9])(\p&#123;Unified_Ideograph&#125;)/gu</span></span><br><span class="line"><span class="keyword">let</span> s = <span class="string">"apple iphone 6s是2016年由us设计在cn 的 fushikang制造"</span></span><br><span class="line"></span><br><span class="line">s = s.replace(g, <span class="function"><span class="keyword">function</span> (<span class="params">match, $<span class="number">1</span>, $<span class="number">2</span>, $<span class="number">3</span>, $<span class="number">4</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> res = $<span class="number">3</span> &amp;&amp; $<span class="number">4</span> ? $<span class="number">3</span> + <span class="string">" "</span> + $<span class="number">4</span> : $<span class="number">1</span> + <span class="string">" "</span> + $<span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(s)</span><br></pre></td></tr></table></figure>
-<p>这里也改进了正则只需要使用一个，需要注意的是，那么使用替换原则的话，后面的组匹配是在第一二个匹配之后，所以要使用 <code>$3, $4</code>。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/用-JS-和-Go-来实现中英文简单排版/" data-id="cjhdid90r000npwm1yxkg81j2" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/golang/">golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/nodejs/">nodejs</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-nodejs/十行代码将-Nodejs-fs-模块转换无回调（promisify）形式" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog/2018/05/20/nodejs/十行代码将-Nodejs-fs-模块转换无回调（promisify）形式/" class="article-date">
-  <time datetime="2018-05-19T22:30:26.000Z" itemprop="datePublished">2018-05-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog/categories/Node-js/">Node.js</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog/2018/05/20/nodejs/十行代码将-Nodejs-fs-模块转换无回调（promisify）形式/">十行代码将 Nodejs fs 模块转换无回调（promisify）形式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>promisify 是指将 Node.js 回调风格的函数转化为 Promise 形式，这样就可以使用 <code>then().catch()</code> 的方式避免回调地狱。</p>
-<p>那么什么 Node.js 回调风格呢？简单讲就是回调函数参数中的第一个参数必须是 error，其余是必要的参数。</p>
-<p>举个例子。</p>
-<p><code>fs.open(path, flags[, mode], callback)</code> 中的 callback 第一个参数是 <code>err &lt;Error&gt;</code> ，最后才是必要参数<code>fd &lt;integer&gt;</code>，Node.js 内置包都是这种风格的。</p>
-<p>那怎么简单的 promisify 呢？</p>
-<p>在 util 包里面有一个函数就是专门 promisify 的，使用方式如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> stat = util.promisify(fs.stat);</span><br><span class="line">stat(<span class="string">'.'</span>).then(<span class="function">(<span class="params">stats</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// Do something with `stats`</span></span><br><span class="line">&#125;).catch(<span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// Handle the error.</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>那么我们只要遍历 fs 包找到其函数然后转化为 promise 函数即可。</p>
-<p>具体代码如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>)</span><br><span class="line"><span class="keyword">const</span> &#123; promisify &#125; = <span class="built_in">require</span>(<span class="string">"util"</span>)</span><br><span class="line"><span class="keyword">const</span> isFunc = <span class="function">(<span class="params">fn</span>) =&gt;</span> (&#123;&#125;).toString.apply(fn).match(<span class="regexp">/\s(\w+)/</span>)[<span class="number">1</span>] === <span class="string">"Function"</span></span><br><span class="line"><span class="keyword">const</span> fsp = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> fn <span class="keyword">in</span> fs) &#123;</span><br><span class="line">    isFunc(fs[fn]) &amp;&amp; (fsp[fn] = promisify(fs[fn]))</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">module</span>.exports = fsp</span><br></pre></td></tr></table></figure>
-<p>嗯，算起来只有8行。</p>
-<p>上面的代码只是将函数进行转换，而没有加上常量，下面代码进行了多处优化。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>)</span><br><span class="line"><span class="keyword">const</span> &#123; promisify &#125; = <span class="built_in">require</span>(<span class="string">"util"</span>)</span><br><span class="line"><span class="keyword">const</span> fsp = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> fn <span class="keyword">in</span> fs) &#123;</span><br><span class="line">    fsp[fn] = <span class="keyword">typeof</span> fs[fn] === <span class="string">"function"</span> ? promisify(fs[fn]) : fs[fn]</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">module</span>.exports = fsp</span><br></pre></td></tr></table></figure>
-<p>在 Nodejs 10 中我们可以使用还在实验状态的 fs/promise 包。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fsp = <span class="built_in">require</span>(<span class="string">"fs/promise"</span>);</span><br><span class="line">fsp.writeFile(<span class="string">"test.md"</span>, <span class="string">"test"</span>);</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/十行代码将-Nodejs-fs-模块转换无回调（promisify）形式/" data-id="cjhdid90k000dpwm13svwpnjl" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-golang/Go语言结构体和JSON序列化" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog/2018/05/20/golang/Go语言结构体和JSON序列化/" class="article-date">
-  <time datetime="2018-05-19T22:29:38.000Z" itemprop="datePublished">2018-05-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog/categories/Golang/">Golang</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog/2018/05/20/golang/Go语言结构体和JSON序列化/">Go语言结构体和JSON序列化</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一个结构体（ struct ）就是一个字段的集合，而 type 的含义跟其字面意思相符。这有点类似 JS 中的对象。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Man struct statement</span></span><br><span class="line"><span class="keyword">type</span> Man <span class="keyword">struct</span> &#123;</span><br><span class="line">	name <span class="keyword">string</span></span><br><span class="line">	age  <span class="keyword">byte</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 直接按顺序声明</span></span><br><span class="line">	a := Man&#123;<span class="string">"lishude"</span>, <span class="number">23</span>&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 先定义后赋值</span></span><br><span class="line">	<span class="keyword">var</span> b Man</span><br><span class="line">	b.name = <span class="string">"ade"</span></span><br><span class="line">	b.age = <span class="number">22</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 类JS对象声明</span></span><br><span class="line">	c := Man&#123;name: <span class="string">"huaji"</span>, age: <span class="number">233</span>&#125;</span><br><span class="line">	fmt.Println(a, b, c)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 读取和设置类JS对象</span></span><br><span class="line">	c.name = <span class="string">"dalao"</span></span><br><span class="line">	fmt.Println(c.name)</span><br><span class="line">       </span><br><span class="line">        <span class="comment">// 指针</span></span><br><span class="line">        d := &amp;Man&#123;<span class="string">"haha"</span>, <span class="number">20</span>&#125;</span><br><span class="line">	fmt.Println(d.age)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="匿名字段"><a href="#匿名字段" class="headerlink" title="匿名字段"></a>匿名字段</h2><p>匿名字段类似下面这种方式</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Human <span class="keyword">struct</span> &#123;</span><br><span class="line">	name <span class="keyword">string</span></span><br><span class="line">	age <span class="keyword">int</span></span><br><span class="line">	weight <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">        <span class="comment">// 匿名字段</span></span><br><span class="line">        <span class="comment">// 那么默认Student就包含了Human的所有字段</span></span><br><span class="line">        <span class="comment">// 其实就是 `Human Human` 的形式</span></span><br><span class="line">	Human  </span><br><span class="line">        <span class="comment">// 如果这里有Human 中的相同的字段那么按照最外访问原则</span></span><br><span class="line">        <span class="comment">// name string</span></span><br><span class="line">	uid <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化赋值</span></span><br><span class="line">s := Student&#123;Human&#123;<span class="string">"Mark"</span>, <span class="number">25</span>, <span class="number">120</span>&#125;, <span class="number">1</span>&#125;</span><br><span class="line"><span class="comment">// 下面输出等价于 `s.name`</span></span><br><span class="line">fmt.Println(s.Human.name)</span><br></pre></td></tr></table></figure>
-<p>如果变量中的 Student 也有 Human 中的 name 字段，Go 不会重写而是优先最外层访问。<code>s.Human.name</code> 就是访问 <code>Human</code> 内的，<code>s.name</code> 就是访问 <code>Student</code> 内的。</p>
-<h2 id="结构体方法"><a href="#结构体方法" class="headerlink" title="结构体方法"></a>结构体方法</h2><p>golang 中不支持面向对象中的声明式写法，结构体方法类似面向对象中的方法声明。</p>
-<p>这里在方法名前面定义 receiver 就是结构体的方法了。如果 receiver 使用的指针，在方法内部不需要使用 <code>*s</code> 也可。这里就是 golang 简洁的一面，如果是函数参数为结构体对象那么在方法内部不用写 * 也可以。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *student)</span><span class="title">setName</span><span class="params">(newName <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    s.name = newName</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>注意 go 中函数参数都是复制，不使用指针无法修改原始值。</p>
-<h2 id="JSON-操作"><a href="#JSON-操作" class="headerlink" title="JSON 操作"></a>JSON 操作</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"encoding/json"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Person <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name   <span class="keyword">string</span> <span class="string">`json:"name"`</span></span><br><span class="line">	Age    <span class="keyword">int</span>    <span class="string">`json:"age"`</span></span><br><span class="line">	Salary <span class="keyword">int</span>    <span class="string">`json:"salary,string"`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p Person)</span> <span class="title">String</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> p.Name</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	str := <span class="string">`&#123;"name":"lishude","age":23,"salary":"13000"&#125;`</span></span><br><span class="line">	p := <span class="built_in">new</span>(Person)</span><br><span class="line">	<span class="keyword">if</span> err := json.Unmarshal([]<span class="keyword">byte</span>(str), p); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	fmt.Println(p.Name, p.Age, p.Salary)</span><br><span class="line"></span><br><span class="line">	p1 := Person&#123;<span class="string">"myname"</span>, <span class="number">22</span>, <span class="number">13000</span>&#125;</span><br><span class="line">	res, _ := json.Marshal(p1)</span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(res))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如上述中，Go 提供了简单的函数用来序列化和反序列化 JSON。</p>
-<p>反序列化操作 <code>json.Unmarshal([]byte(str), p)</code> 第一个参数接收 <code>[]byte</code> slice，第二个参数不能是 nil，必须是一个指针。</p>
-<p>JSON 中的字段类型按照 JS 的类型区分，比如说 JS 只支持 double64 的数字，在 Go 中相应的就是 float64。其它类型可以参照下面说明：</p>
+        <p>nginx 运行后可以指定用户，比如说一个静态网页服务器的文件目录的不同的用户有不同的访问权限，使用 nginx 指定用户就可以有权限对此目录读写。</p>
+<p>我其实很好奇怎么直接指定用户的，而且运行nginx的时候也没有需要输入密码之类旳。</p>
+<p>在网上查找资料后有以下发现：</p>
+<p>Nginx 主进程（master process）会以 root 权限运行，之后主进程会读取 <code>/etc/nginx/nginx.conf</code> 文件中的 user 模块的配置，nginx 会使用这个指定的用户启动工作进程（ worker process）。</p>
+<p>那为什么主进程需要使用 root？因为只有 root 可以监听小于1024的端口号，通常 webserver 使用 80/443 端口，这也就是为什么需要 root 来运行了。如果要更改非root用户来运行，需要更改下面的文件用户和用户组，当然你也就不能使用 &lt;1024 的端口了。 </p>
 <ul>
-<li>bool, for JSON booleans</li>
-<li>float64, for JSON numbers</li>
-<li>string, for JSON strings</li>
-<li>[]interface{}, for JSON arrays</li>
-<li>map[string]interface{}, for JSON objects</li>
-<li>nil for JSON null</li>
+<li>error_log</li>
+<li>access_log</li>
+<li>pid</li>
+<li>client_body_temp_path</li>
+<li>fastcgi_temp_path</li>
+<li>proxy_temp_path</li>
+<li>scgi_temp_path</li>
+<li>uwsgi_temp_path</li>
 </ul>
-<p>其中 JSON object 也可以用 struct 。如果转换的 JSON 字符串中可能会出现不同的字段，这也要在 struct 中定义，Go 会将对应值初始化为零值，但是如果不定义的话就会报错。</p>
-<p>序列化操作 <code>json.Marshal(p1)</code> 接收一个对象，返回一个 <code>[]byte</code> 和  error。</p>
-<p>这里的 Person struct 定义中使用标签，因为定义的字段名称和类型可能和 JSON 的结构不同，加上标签就能区分。 <code>json:&quot;salary,string&quot;</code> 在 Salary 字段是 int 类型，这里可以规定 JSON 字段是字符串类型，Go 会字段进行转换，当然这样定义了， JSON 中的相应字段必须是字符串了，否则会报错。</p>
-<p>注意一点，struct 中所有字段参与反序列化操作的都必须是首字母大写，这是因为在 Go 中只有大写的才是可对外访问的。</p>
-<p>当序列化结构体的时候，可以使用 <code>omitempty</code> 来忽略如果字段为空的情况，使用 <code>-</code> 直接忽略输出。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Person <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name   <span class="keyword">string</span> <span class="string">`json:"username"`</span></span><br><span class="line">	Age    <span class="keyword">byte</span>   <span class="string">`json:"age"`</span></span><br><span class="line">	Passwd <span class="keyword">string</span> <span class="string">`json:"password,omitempty"`</span></span><br><span class="line">	Omit   <span class="keyword">bool</span>   <span class="string">`json:"-"`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如下面的情况，p2 没有 Passwd 字段，则不会输出到 JSON 中。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	p2 := <span class="built_in">new</span>(Person)</span><br><span class="line">	p2.Name = <span class="string">"p2"</span></span><br><span class="line">	p2.Age = <span class="number">22</span></span><br><span class="line">	res, err := json.Marshal(p2)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(err)</span><br><span class="line">	&#125; </span><br><span class="line">        <span class="comment">// &#123;"username":"p2","age":22&#125;</span></span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(res))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果想要直接忽略，不管那个字段有没有值，那么就是用 <code>-</code> 即可。</p>
-<p>如下所示，Omit 字段设置了值也不会输出到 JSON 中，但是 Passwd 和上面对比就能发现，只要其有值就输出到 JSON 中。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	p := <span class="built_in">new</span>(Person)</span><br><span class="line"></span><br><span class="line">	p.Name = <span class="string">"p2"</span></span><br><span class="line">	p.Age = <span class="number">22</span></span><br><span class="line">	p.Omit = <span class="literal">true</span></span><br><span class="line">	p.Passwd = <span class="string">"password"</span></span><br><span class="line">	res, _ := json.Marshal(p)</span><br><span class="line">	<span class="comment">// &#123;"username":"p2","age":22,"password":"password"&#125;</span></span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(res))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>好了，具体进程运行如下图所示。</p>
+<p><img src="https://user-images.githubusercontent.com/24730006/33918362-d26099e0-dfed-11e7-9c84-9d9567b2f658.png" alt="image"></p>
+<p>这里可以看到 nginx 只有一个主进程和多个工作进程，主进程主要读取和评估配置文件正确性，以及管理工作进程。工作进程是真正的网络请求处理的进程。</p>
+<p>如果主进程使用root运行，那么nginx 将会调用 setuid()/setgid() 去设置 user/group。如果 group 没有特别指定，那么 nginx 会使用 user 相同的名称设置 group。默认为 <code>nobody nogroup</code> 或者安装nginx的时候在  <code>./configure</code> 指定的  <code>--user=USER</code> 和 <code>--group=GROUP</code></p>
+<p><img src="https://user-images.githubusercontent.com/24730006/34400643-7f56ac3e-ebce-11e7-8f7a-d5aea792bfbf.png" alt="image"></p>
+<p><a href="http://nginx.org/en/docs/ngx_core_module.html#user" target="_blank" rel="noopener">配置语法</a>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax: user user [group];</span><br><span class="line">defualt: user nobody nobody;</span><br><span class="line">Context: main</span><br></pre></td></tr></table></figure>
+<p>如果使用了 php 的话，那么同时还需要编辑 <a href="http://php.net/manual/en/install.fpm.configuration.php" target="_blank" rel="noopener">php-fpm.conf</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">; Set permissions for unix socket, if one is used. In Linux, read/write</span><br><span class="line">; permissions must be set in order to allow connections from a web server. Many</span><br><span class="line">; BSD-derived systems allow connections regardless of permissions.</span><br><span class="line">; Default Values: user and group are set as the running user</span><br><span class="line">;                 mode is set to 0660</span><br><span class="line">listen.owner = xxx</span><br><span class="line">listen.group = xxx</span><br><span class="line">;liseten.mode = 0660</span><br></pre></td></tr></table></figure>
+<p>参考：</p>
+<ol>
+<li><a href="https://stackoverflow.com/questions/42329261/running-nginx-as-non-root-user" target="_blank" rel="noopener">Running Nginx as non root user
+</a></li>
+<li><a href="https://serverfault.com/questions/433265/how-do-i-change-the-nginx-user" target="_blank" rel="noopener">How do I change the NGINX user?</a></li>
+</ol>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/golang/Go语言结构体和JSON序列化/" data-id="cjhdid9020000pwm1tznsqqvn" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/nginx-user-模块详解/" data-id="cjhdiq044000c4km1xaxousgb" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/nginx/">nginx</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-tool/VSCode-代码风格自动校验和格式化清单" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/2018/05/20/tool/VSCode-代码风格自动校验和格式化清单/" class="article-date">
+  <time datetime="2018-05-19T22:44:40.000Z" itemprop="datePublished">2018-05-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/tool/">tool</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2018/05/20/tool/VSCode-代码风格自动校验和格式化清单/">VSCode代码风格自动校验和格式化清单</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>vscode 提供了很多优秀的插件，对于代码风格校验和代码格式化，我最常用的是 eslint 和 prettier，eslint 自不必说，第二个是代码格式化插件，不仅可以对 js html css 格式化，还可以对 sass 以及 json 等进行格式化。</p>
+<p>当然格式化的标准编辑器不太同意，比如函数表达式中函数名后面带空格与否，prettier 默认的是不带空格，不过团队中常用的是 JS Standard 是有空格的，更别提字符串用双引号还是单引号，表达式后面跟不跟分号这样的风格差异的问题了。</p>
+<p>不过还好的是 eslint 和 prettier 二者可以结合自动对代码进行格式化。</p>
+<p>首先，在 vscode 市场安装 eslint 和 prettier 两个插件。</p>
+<p>然后我们需要在项目中再安装 eslint 的包。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yarn add eslint --dev</span><br><span class="line">npm i -D eslint</span><br></pre></td></tr></table></figure>
+<p>eslint 提示的是也可以全局安装，<del>但是我全局安装之后并没有作用</del>，必须使用 npm 而不是 yarn 安装才可以。我觉得为了团队其他人的更简单使用，建议还是在 package.json 中安装 eslint。</p>
+<p>打开 vscode 的设置，mac下是 code -&gt; 首选项 -&gt; 设置，windows下是 文件 -&gt; 首选项 -&gt; 设置，在搜索设置中更改下列配置。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;  </span><br><span class="line">  <span class="attr">"eslint.validate"</span>: [</span><br><span class="line">    <span class="string">"javascript"</span>,</span><br><span class="line">    <span class="string">"javascriptreact"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">"editor.formatOnSave"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"prettier.eslintIntegration"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"eslint.autoFixOnSave"</span>: <span class="literal">true</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对 JS 进行检查，我们需要对添加 eslint 设置，首先添加 <code>.eslintrc.js</code> ，这里添加 <code>standard</code> 风格，更多可以在 eslint 网站查看。这里我们使用命令行自动生成，运行<code>eslint --init</code>，然后选择 <code>Use a popular style guide</code> 按照提示操作，如下可做参考。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">? How would you like to configure ESLint? Use a popular style guide</span><br><span class="line">? Which style guide do you want to follow? Standard</span><br><span class="line">? What format do you want your config file to be in? JavaScript</span><br><span class="line">Checking peerDependencies of eslint-config-standard@latest</span><br><span class="line">Installing eslint-config-standard@latest, eslint-plugin-import@&gt;=2.2.0, eslint-plugin-node@&gt;=4.2.2, eslint-plugin-promise@&gt;=3.5.0, eslint-plugin-standard@&gt;=3.0.0</span><br><span class="line">npm notice created a lockfile as package-lock.json. You should commit this file.</span><br><span class="line">npm WARN eslint-config-standard@10.2.1 requires a peer of eslint@&gt;=3.19.0 but none is installed. You must install peer dependencies yourself.</span><br><span class="line">npm WARN eslint-plugin-standard@3.0.1 requires a peer of eslint@&gt;=3.19.0 but none is installed. You must install peer dependencies yourself.</span><br><span class="line">npm WARN eslint-plugin-node@5.2.1 requires a peer of eslint@&gt;=3.1.0 but none is installed. You must install peer dependencies yourself.</span><br><span class="line">npm WARN eslint-plugin-import@2.8.0 requires a peer of eslint@2.x - 4.x but none is installed. You must install peer dependencies yourself.</span><br><span class="line"></span><br><span class="line">+ eslint-config-standard@10.2.1</span><br><span class="line">+ eslint-plugin-standard@3.0.1</span><br><span class="line">+ eslint-plugin-promise@3.6.0</span><br><span class="line">+ eslint-plugin-node@5.2.1</span><br><span class="line">+ eslint-plugin-import@2.8.0</span><br><span class="line">added 53 packages in 9.873s</span><br><span class="line">Successfully created .eslintrc.js file in C:\Users\Lishude\Desktop\project\express</span><br></pre></td></tr></table></figure>
+<p>这样我们在项目中只要 <code>Ctrl+s</code> 就可以自动格式了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://islishude.github.io/blog/2018/05/20/tool/VSCode-代码风格自动校验和格式化清单/" data-id="cjhdiq03y00044km19e37u4wl" class="article-share-link">Share</a>
       
       
     </footer>
@@ -253,10 +194,10 @@
 
 
   
-    <article id="post-linux/为什么-git-pull-会修改文件权限和所属用户以及用户组？" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-nodejs/密码强度校验：先行断言正则与通用库" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2018/05/20/linux/为什么-git-pull-会修改文件权限和所属用户以及用户组？/" class="article-date">
-  <time datetime="2018-05-19T22:27:15.000Z" itemprop="datePublished">2018-05-19</time>
+    <a href="/blog/2018/05/20/nodejs/密码强度校验：先行断言正则与通用库/" class="article-date">
+  <time datetime="2018-05-19T22:43:49.000Z" itemprop="datePublished">2018-05-19</time>
 </a>
     
   <div class="article-category">
@@ -271,7 +212,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/blog/2018/05/20/linux/为什么-git-pull-会修改文件权限和所属用户以及用户组？/">为什么 git pull 会修改文件权限和所属用户以及用户组？</a>
+      <a class="article-title" href="/blog/2018/05/20/nodejs/密码强度校验：先行断言正则与通用库/">密码强度校验：先行断言正则与通用库</a>
     </h1>
   
 
@@ -279,46 +220,29 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="问题过程"><a href="#问题过程" class="headerlink" title="问题过程"></a>问题过程</h2><p>首先 git clone 之后进行改变用户组</p>
-<p><img src="https://user-images.githubusercontent.com/24730006/33516807-dae0910c-d7b3-11e7-8282-d314db8eddc6.png" alt="image"></p>
-<p>然后使用 git pull 更新本地仓库，这里明显发现已经发生了变化。</p>
-<p>注意：git pull = git fetch + git merge 下面会更多用 git merge 说明。</p>
-<p><img src="https://user-images.githubusercontent.com/24730006/33516827-2fa1bd56-d7b4-11e7-98cc-d18faf0e39ca.png" alt="image"></p>
-<p>当然如果修改了权限，git pull 之后也会变成默认权限（根据 umask 值确定）</p>
-<p>注意：当 <code>git config core.filemode true</code> 的时候，git 只记录文件是否可执行权限。比如说下方的 3.js 用户和用户组可读可写，但都没有执行权限，一旦设置执行权限就会触发 git 修改追踪，不设置则不需要追踪修改记录。一般我会把 <code>core.filemode</code> 设置为 false，这样就不会存在设置权限后还要 commit 的问题。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-rw-rw-r-- 1 x x 0 Dec 12 21:15 3.js</span><br></pre></td></tr></table></figure>
-<p>当然也不建议这么做，可以看看后面的最佳实践。</p>
-<h2 id="为什么会更改"><a href="#为什么会更改" class="headerlink" title="为什么会更改"></a>为什么会更改</h2><p>新建一个文件那么用户和用户组就是当前的用户以及所在的用户组。但是如果另一个用户修改文件内容是不会修改文件用户所属的。</p>
-<p>那么这里我就猜测 git merge 的时候可能就是新建而不是修改。</p>
-<p>这里只要修改内容后再更改用户组，再使用 git merge 的时候如果文件新建的时间变成了最新的时间就是说明是新建而不是修改。</p>
-<p>ubuntu 有一个 <code>sudo debugfs -R filename mountdev</code> 的命令可以查看文件新建时间，但是我用了不可以。。不过我用 mac 的时候发现 mac 内的文件是可以查看文件新建时间的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">➜  test git init</span><br><span class="line">Initialized empty Git repository in /Users/lishude/Downloads/test/.git/</span><br><span class="line">➜  test git:(master) touch test.txt</span><br><span class="line">➜  test git:(master) ✗ git add .</span><br><span class="line">➜  test git:(master) ✗ git commit -m&quot;1&quot;</span><br><span class="line">[master (root-commit) c5fa95c] 1</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br><span class="line"> create mode 100644 test.txt</span><br><span class="line">➜  test git:(master) stat test.txt</span><br><span class="line">16777220 1894632 -rw-r--r-- 1 lishude staff 0 2 &quot;Dec 17 18:07:10 2017&quot; &quot;Dec 17 18:06:55 2017&quot; &quot;Dec 17 18:06:55 2017&quot; &quot;Dec 17 18:06:44 2017&quot; 4194304 8 0 test.txt</span><br></pre></td></tr></table></figure>
-<p>这里我新建一个git仓库并且commit了一条。</p>
-<p>注意，mac 的 <code>stat file</code> 和 ubuntu 下的还不同，这里是有创建时间的，就是最后一个时间，不过格式就比 ubuntu 差了许多。</p>
-<p>然后我们再次 commit 然后修改用户组，最后 reset 查看文件信息。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">➜  test git:(master) git commit -am&quot;2&quot;</span><br><span class="line">[master 773907e] 2</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br><span class="line">➜  test git:(master) stat test.txt</span><br><span class="line">16777220 1894632 -rw-r--r-- 1 lishude staff 0 4 &quot;Dec 17 18:07:48 2017&quot; &quot;Dec 17 18:07:38 2017&quot; &quot;Dec 17 18:07:38 2017&quot; &quot;Dec 17 18:06:44 2017&quot; 4194304 8 0 test.txt</span><br><span class="line">➜  test git:(master) sudo chown root test.txt</span><br><span class="line">➜  test git:(master) ll</span><br><span class="line">total 8</span><br><span class="line">-rw-r--r--  1 root  staff     4B 12 17 18:07 test.txt</span><br><span class="line">➜  test git:(master) git reset --hard HEAD~1</span><br><span class="line">HEAD is now at c5fa95c 1</span><br><span class="line">➜  test git:(master) stat test.txt</span><br><span class="line">16777220 1894740 -rw-r--r-- 1 lishude staff 0 2 &quot;Dec 17 18:09:18 2017&quot; &quot;Dec 17 18:09:15 2017&quot; &quot;Dec 17 18:09:15 2017&quot; &quot;Dec 17 18:09:15 2017&quot; 4194304 8 0 test.txt</span><br></pre></td></tr></table></figure>
-<p>通过实验确实是这样的，文件新建时间已经变成最新的了。</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="使用特定用户执行"><a href="#使用特定用户执行" class="headerlink" title="使用特定用户执行"></a>使用特定用户执行</h3><p>比如说使用文件需要保留 www-data 权限就需要用这个</p>
-<p><code>sudo -u www-data git pull origin master</code></p>
-<p>但是需要注意的这个会修改所有需要更改的所有与当前版本库不同内容的文件的用户和用户组，并且同时也会会更改 <code>.git</code> 文件夹。</p>
-<h3 id="git-hook"><a href="#git-hook" class="headerlink" title="git hook"></a>git hook</h3><p>下面在 post 或者 merge 之后会触发钩子命令，也就是自动执行一些操作，这里我们就可以直接为文件更改权限或者修改用户和用户组。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># .git/hooks/post-merge</span></span><br><span class="line"></span><br><span class="line">sudo chmod -R 775 target</span><br><span class="line">sudo chown -R user:group target</span><br></pre></td></tr></table></figure>
-<p>这里说阻止其实没有办法阻止，总结一句话就是，git 不记录用户关系和除了执行权限的权限，所有的操作取决于执行git操作的用户。</p>
-<h3 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h3><p>一般在生产环境最好不要更改文件的用户组或者权限。</p>
-<p>比如说 nginx 还有 php-fpm 等就直接使用当前用户（当然一般都是所属 root 和 sudos 用户组的），修改这些设置就不需要再更改用户。在 #1 有 nginx 和 php-fpm 的实践。</p>
-<p>那么设置文件权限呢？也是一样，不要直接在生产环境设置，而是再本地设置好（当 <code>git config core.filemode true</code> 时候 git 会跟踪文件权限）再上传到生产环境。</p>
-<h2 id="补充-git-指令"><a href="#补充-git-指令" class="headerlink" title="补充 git 指令"></a>补充 git 指令</h2><p>git 位于 <code>usr/bin/git</code> ，文件所属 root 以及 root 组，权限为755，所以所有的用户都可以执行。</p>
-<p>使用 git 进行 git pull 或者 git merge 的时候会以当前用户更改 <code>.git</code> 文件夹的用户和用户组，谨慎使用不同用户，最好按照最佳实践来做。</p>
-<p>在 #5 有用户与用户组的详细说明。 </p>
+        <p>在用户注册业务场景中，一般而言的用户密码强度：密码至少8个字符，包括1个大写字母，1个小写字母和1个数字或特殊字符。本文原本转载来自<a href="http://www.css88.com/archives/8100" target="_blank" rel="noopener">css88</a>的一篇整理，但是其内容只是简单说明了几种验证密码强度正则的写法，比如说 <code>/^(?=.*\d)(?=.*[a-zA-Z]).{6,20}$/</code> ，这里用了「先行断言」，之前自己对此理解不太准确，本文就是附带讲解这个概念来一步一步说明密码强度正则的写法。</p>
+<h2 id="先行断言"><a href="#先行断言" class="headerlink" title="先行断言"></a>先行断言</h2><p>先行断言（Positive look-ahead）的语法形式为 <code>x(?=y)</code>，意思就是 x 只有在 y 前面才匹配，并且 y 不会被计入返回结果。</p>
+<p>如果要匹配一个 70% 中的数字，就可以写成 <code>/\d+(?=%)/</code>。</p>
+<p>先行断言很容易让人误解，比如说上面举例的密码强度表达式（<code>/^(?=.*\d)(?=.*[a-zA-Z]).{6,20}$/</code>）中的先行断言前面并没有任何字符，它其实<strong>只是匹配某些位置不占用字符</strong>，所以匹配返回的内容是不包括先行断言内的内容的。</p>
+<p>下面使用 JavaScript 具体说明：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> res = <span class="regexp">/(?=\d)[a-z]/</span>.test(<span class="string">"1h"</span>)</span><br></pre></td></tr></table></figure>
+<p>那么<code>res</code> 的返回结果是？肯定有人说是 <code>true</code> 但是正确结果为 <code>false</code>。</p>
+<p>接下来来分析一下，想象一个指针在字符串 <code>1h</code> 上移动，那么根据上面例子的正则，指针会在 <code>1h</code> 之前，用下划线指代指针的话，指针的位置就是 <code>_1h</code> 的，但是 <code>(?=\d)[a-z]</code> 要求后面的字符是不是数字而是小写字母，所以就匹配不了。</p>
+<p>那么，我们稍微修改一下，现在就匹配了。也就是说<strong>断言不消耗字符</strong>，如果找不到断言就不匹配。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/(?=\d)\d[a-z]/.test(<span class="string">"1h"</span>)</span><br></pre></td></tr></table></figure>
+<p>那么再说明密码强度的正则就简单了。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&amp;])[A-Za-z\d$@$!%*#?&amp;]&#123;6,&#125;$/</span><br></pre></td></tr></table></figure>
+<p>在断言中加入 <code>.</code> 代表任意字符，那么就是匹配整个密码字符串。</p>
+<h2 id="密码强度库"><a href="#密码强度库" class="headerlink" title="密码强度库"></a>密码强度库</h2><p>除了正则之外，还有一个业界通用的密码强度库 Dropbox 的 <a href="https://github.com/dropbox/zxcvbn" target="_blank" rel="noopener">zxcvbn</a>。</p>
+<p>库名字很好记就是键盘字符第三排的字母，另外根据统计取这样密码的用户很多。</p>
+<p>zxcvbn 覆盖了所有主流的语言，包括 JS PHP Python 等，前端也可以直接引入，不过我并不推荐，因为包太大了，足有 800K。如果前端使用的话，最好还是使用正则。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/为什么-git-pull-会修改文件权限和所属用户以及用户组？/" data-id="cjhdid90g0008pwm145d27tru" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/密码强度校验：先行断言正则与通用库/" data-id="cjhdiq04l00164km1qm2aklcs" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/git/">git</a></li></ul>
-
     </footer>
   </div>
   
@@ -326,14 +250,14 @@
 
 
   
-    <article id="post-golang/Go-语言延迟调用和错误处理" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-linux/Ubuntu新建用户并赋予权限清单" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2018/05/20/golang/Go-语言延迟调用和错误处理/" class="article-date">
-  <time datetime="2018-05-19T22:25:27.000Z" itemprop="datePublished">2018-05-19</time>
+    <a href="/blog/2018/05/20/linux/Ubuntu新建用户并赋予权限清单/" class="article-date">
+  <time datetime="2018-05-19T22:43:02.000Z" itemprop="datePublished">2018-05-19</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/blog/categories/Golang/">Golang</a>
+    <a class="article-category-link" href="/blog/categories/Linux/">Linux</a>
   </div>
 
   </div>
@@ -344,7 +268,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/blog/2018/05/20/golang/Go-语言延迟调用和错误处理/">Go 语言延迟调用和错误处理</a>
+      <a class="article-title" href="/blog/2018/05/20/linux/Ubuntu新建用户并赋予权限清单/">Ubuntu新建用户并赋予权限清单</a>
     </h1>
   
 
@@ -352,42 +276,313 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Go 支持使用关键字 defer 创建函数内延迟语句（进栈），当函数在 return 之前，这些 defer 语句会按照先进后出执行（出栈）。</p>
-<p>如下所示，在 test 函数 return 之前所有进入 defer 栈的语句都会先执行。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	res := test(<span class="number">1</span>)</span><br><span class="line">	fmt.Println(res)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">test</span><span class="params">(a <span class="keyword">int</span>)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"0"</span>)</span><br><span class="line">	<span class="keyword">defer</span> fmt.Println(<span class="string">"1"</span>)</span><br><span class="line">	<span class="keyword">if</span> a == <span class="number">1</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"2"</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> fmt.Println(<span class="string">"3"</span>)</span><br><span class="line">	<span class="keyword">return</span> <span class="string">"3"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>需要注意的是，编译器在到达 defer 语句的时候要进行确认参数值以及类型，分配堆栈等。下面这段代码输出的是 2 而不是 4，这是因为 i 已经进行了一次计算。<a href="https://tonybai.com/2018/03/23/the-analysis-of-the-param-evaluation-of-defer-functions/" target="_blank" rel="noopener">REF</a></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// https://play.golang.org/p/dOUFNj96EIQ</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> i <span class="keyword">int</span> = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">defer</span> fmt.Println(<span class="string">"result =&gt;"</span>,<span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">int</span></span> &#123; <span class="keyword">return</span> i * <span class="number">2</span> &#125;())</span><br><span class="line">    i++</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>不止如此，就算使用 go 关键字也是这样。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">     <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> i <span class="keyword">int</span> = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">go</span> fmt.Println(<span class="string">"result =&gt;"</span>,<span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">int</span></span> &#123; <span class="keyword">return</span> i * <span class="number">2</span> &#125;())</span><br><span class="line">    i++</span><br><span class="line">    time.Sleep(<span class="number">3</span>*time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果要改变这里的方式就要把这里的函数进行改成闭包即可。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">var</span> i <span class="keyword">int</span> = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">                fmt.Println(<span class="string">"result =&gt;"</span>, <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">int</span></span> &#123; <span class="keyword">return</span> i * <span class="number">2</span> &#125;())</span><br><span class="line">        &#125;()</span><br><span class="line">        i++</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>另外这些 defer 语句不受错误的影响，之前入栈的 defer 会照样执行。</p>
-<p>如下所示，在发生了除零错误后，之前调用的 <code>fmt.Println()</code> 函数依旧会执行，而后续的没有入栈的就不会调用了。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">test2</span><span class="params">(x <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> fmt.Println(<span class="string">"1"</span>)</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="comment">// 除 0 错误</span></span><br><span class="line">		fmt.Println(<span class="number">100</span> / x)</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">defer</span> fmt.Println(<span class="string">"2"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">test2(<span class="number">0</span>)</span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="comment">// panic: runtime error: integer divide by zero</span></span><br></pre></td></tr></table></figure>
-<p>所以我们可以用来做资源释放和错误处理。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">test3</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="comment">// 如果发生错误 f 为空，err 不为空</span></span><br><span class="line">	f, err := os.Create(<span class="string">"defer.txt"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> err</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 释放文件句柄</span></span><br><span class="line">	<span class="keyword">defer</span> f.Close()</span><br><span class="line">	f.WriteString(<span class="string">"Hello, World!"</span>)</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Go 没有 C 系语言的 <code>try...throw</code> 的形式，而是使用 panic 和 recover 的形式，而这两个都是内建函数。</p>
-<p>panic 用于发出错误（恐慌），而 recover 用于接收 panic 的信息。捕获函数 recover 只有在延迟调⽤内直接调⽤才会终⽌错误，否则总是返回 nil。任何未捕获的错误都会沿调⽤堆栈向外传递。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">throwsPanic</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">if</span> x := <span class="built_in">recover</span>(); x != <span class="literal">nil</span> &#123;</span><br><span class="line">			fmt.Println(x)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="built_in">panic</span>(<span class="string">"panic func"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>以上调用就会输出 <code>panic func</code>。如果是延迟调⽤中引发的错误，可被后续延迟调⽤捕获，但仅最后⼀个错误可被捕获。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">test</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		fmt.Println(<span class="built_in">recover</span>())</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(<span class="string">"defer panic"</span>)</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="built_in">panic</span>(<span class="string">"test panic"</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// defer panic</span></span><br></pre></td></tr></table></figure>
-<p><a href="https://github.com/astaxie/build-web-application-with-golang/blob/master/zh/02.3.md#panic%E5%92%8Crecover" target="_blank" rel="noopener">补充</a>错误处理</p>
-<blockquote>
-<p>Panic 是一个内建函数，可以中断原有的控制流程，进入一个令人恐慌的流程中。当函数F调用panic，函数F的执行被中断，但是F中的延迟函数会正常执行，然后F返回到调用它的地方。在调用的地方，F的行为就像调用了panic。这一过程继续向上，直到发生panic的goroutine中所有调用的函数返回，此时程序退出。恐慌可以直接调用panic产生。也可以由运行时错误产生，例如访问越界的数组。 </p>
-</blockquote>
-<blockquote>
-<p>Recover 是一个内建的函数，可以让进入令人恐慌的流程中的goroutine恢复过来。recover仅在延迟函数中有效。在正常的执行过程中，调用recover会返回nil，并且没有其它任何效果。如果当前的goroutine陷入恐慌，调用recover可以捕获到panic的输入值，并且恢复正常的执行。</p>
-</blockquote>
-<blockquote>
-<p>一定要记住，你应当把它作为最后的手段来使用，也就是说，你的代码中应当没有，或者很少有panic的东西。这是个强大的工具，请明智地使用它。</p>
-</blockquote>
+        <p>通常新建用户会遇到很多问题，比如 shell 不支持 tab 提示，下述流程解决了常见新建用户出现的问题。</p>
+<h2 id="新建用户"><a href="#新建用户" class="headerlink" title="新建用户"></a>新建用户</h2><p>首先在建立一个用户家目录，一般建立在 <code>/home</code> 下，目录名一般直接使用用户名。接着使用 <code>useradd</code> 命令继续，命令结构如下。</p>
+<p><code>useradd -d HOME-DIR -s /bin/bash -c COMMET -G GOURP-NAME USER-NAME</code></p>
+<p><code>-d</code> 指示用户家目录，使用刚才新建的目录即可。<code>-c</code> 指定注释。</p>
+<p><code>-s</code> 指定 shell，默认是不指定的，一定要加上，要不然就会出现上述说的问题。</p>
+<p> <code>-G</code> 指定用户组，之后也可以使用 <code>usermod -aG GROUP-NAME USER-NAME</code> 进行添加。</p>
+<p>最后再加上用户名称即可。</p>
+<p>值得注意的是 <code>-p</code> 可以指定登录密码，但是我尝试过没有成功。还有一个方式指定密码，使用 <code>passwd USER-NAME</code> 即可。</p>
+<p>详细的参数在文后有说明。然后给用户家目录赋权</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chown -R user:group /home/user</span><br><span class="line">sudo chmod -R 770 /home/user</span><br></pre></td></tr></table></figure>
+<p>最后复制shell模板到家目录</p>
+<p><code>sudo /etc/skel/.bashrc /home/user</code></p>
+<h2 id="root-权限"><a href="#root-权限" class="headerlink" title="root 权限"></a>root 权限</h2><p>编辑 <code>/etc/sudoers</code> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># User privilege specification</span><br><span class="line">root	ALL=(ALL:ALL) ALL</span><br><span class="line">user  ALL=(ALL:ALL) ALL</span><br></pre></td></tr></table></figure>
+<p>之前提及过 usermod 可以把用户添加到用户组，在 <code>/etc/sudoers</code> 后有说明将用户添加 <code>sudo</code> 组就可以使用 <code>sudo</code> 命令获取管理权限，在 CentOS上通常是 wheel 组而不是 sudo 组。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Allow members of group sudo to execute any command</span><br><span class="line">%sudo	ALL=(ALL:ALL) ALL</span><br></pre></td></tr></table></figure>
+<p>第一个“ALL”表示该规则适用于所有主机，第二个表示root用户可以像所有用户一样运行命令，第三个表示root用户可以像所有组一样运行命令，最后一个“ALL”表示这些规则适用于所有命令。详情可参考<a href="https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos" target="_blank" rel="noopener">这里</a>。</p>
+<p>如果已经在命令中设置将新用户加入 root sudo 用户组的，以上的规则设定也可以不用。</p>
+<p>最后退出当前用户，重新使用新用户登录试一试吧！</p>
+<h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><p>更简单的命令，直接会创建用户家目录以及将 .bashrc 等文件移动到用户家目录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd --create-home username</span><br></pre></td></tr></table></figure>
+<h2 id="useradd-命令清单"><a href="#useradd-命令清单" class="headerlink" title="useradd 命令清单"></a>useradd 命令清单</h2><p><img width="649" alt="2018-03-17 5 10 34" src="https://user-images.githubusercontent.com/24730006/37553587-2ea56f52-2a06-11e8-82d7-d638abbfe5c9.png"></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/golang/Go-语言延迟调用和错误处理/" data-id="cjhdid9060001pwm1jwtxkhzy" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/Ubuntu新建用户并赋予权限清单/" data-id="cjhdiq046000d4km1fvbj5o72" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-linux/bash-键盘高级操作技巧" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/2018/05/20/linux/bash-键盘高级操作技巧/" class="article-date">
+  <time datetime="2018-05-19T22:40:43.000Z" itemprop="datePublished">2018-05-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2018/05/20/linux/bash-键盘高级操作技巧/">bash 键盘高级操作技巧</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="移动光标"><a href="#移动光标" class="headerlink" title="移动光标"></a>移动光标</h3><table>
+<thead>
+<tr>
+<th>按键</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl-a</td>
+<td>移动光标到行首。</td>
+</tr>
+<tr>
+<td>Ctrl-e</td>
+<td>移动光标到行尾。</td>
+</tr>
+<tr>
+<td>Ctrl-f</td>
+<td>光标前移一个字符；和右箭头作用一样。</td>
+</tr>
+<tr>
+<td>Ctrl-b</td>
+<td>光标后移一个字符；和左箭头作用一样。</td>
+</tr>
+<tr>
+<td>Alt-f</td>
+<td>光标前移一个字（word\单词）。</td>
+</tr>
+<tr>
+<td>Alt-b</td>
+<td>光标后移一个字（word\单词）。</td>
+</tr>
+<tr>
+<td>Ctrl-l</td>
+<td>清空屏幕，移动光标到左上角。clear 命令完成同样的工作。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="文本编辑命令"><a href="#文本编辑命令" class="headerlink" title="文本编辑命令"></a>文本编辑命令</h3><table>
+<thead>
+<tr>
+<th>按键</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl-d</td>
+<td>删除光标位置的字符。</td>
+</tr>
+<tr>
+<td>Ctrl-t</td>
+<td>光标位置的字符和光标前面的字符互换位置。</td>
+</tr>
+<tr>
+<td>Alt-t</td>
+<td>光标位置的字和其前面的字互换位置。</td>
+</tr>
+<tr>
+<td>Alt-l</td>
+<td>把从光标位置到字尾的字符转换成小写字母。</td>
+</tr>
+<tr>
+<td>Alt-u</td>
+<td>把从光标位置到字尾的字符转换成大写字母。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="剪切和粘贴命令"><a href="#剪切和粘贴命令" class="headerlink" title="剪切和粘贴命令"></a>剪切和粘贴命令</h3><table>
+<thead>
+<tr>
+<th>按键</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl-k</td>
+<td>剪切从光标位置到行尾的文本。</td>
+</tr>
+<tr>
+<td>Ctrl-u</td>
+<td>剪切从光标位置到行首的文本。</td>
+</tr>
+<tr>
+<td>Alt-d</td>
+<td>剪切从光标位置到词尾的文本。</td>
+</tr>
+<tr>
+<td>Alt-Backspace</td>
+<td>剪切从光标位置到词头的文本。如果光标在一个单词的开头，剪切前一个单词。</td>
+</tr>
+<tr>
+<td>Ctrl-y</td>
+<td>把剪切环中的文本粘贴到光标位置。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="重新执行命令"><a href="#重新执行命令" class="headerlink" title="重新执行命令"></a>重新执行命令</h3><table>
+<thead>
+<tr>
+<th>按键</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl-p</td>
+<td>移动到上一个历史条目。类似于上箭头按键。</td>
+</tr>
+<tr>
+<td>Ctrl-n</td>
+<td>移动到下一个历史条目。类似于下箭头按键。</td>
+</tr>
+<tr>
+<td>Alt-&lt;</td>
+<td>移动到历史列表开头。</td>
+</tr>
+<tr>
+<td>Alt-&gt;</td>
+<td>移动到历史列表结尾，即当前命令行。</td>
+</tr>
+<tr>
+<td>Ctrl-r</td>
+<td>反向递增搜索。从当前命令行开始，向上递增搜索。</td>
+</tr>
+<tr>
+<td>Alt-p</td>
+<td>反向搜索，不是递增顺序。输入要查找的字符串，然后按下 Enter，执行搜索。</td>
+</tr>
+<tr>
+<td>Alt-n</td>
+<td>向前搜索，非递增顺序。</td>
+</tr>
+<tr>
+<td>Ctrl-o</td>
+<td>执行历史列表中的当前项，并移到下一个。如果你想要执行历史列表中一系列的命令，这很方便。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="控制命令"><a href="#控制命令" class="headerlink" title="控制命令"></a>控制命令</h3><table>
+<thead>
+<tr>
+<th>按键</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl + l</td>
+<td>清屏</td>
+</tr>
+<tr>
+<td>Ctrl + o</td>
+<td>执行当前命令，并选择上一条命令</td>
+</tr>
+<tr>
+<td>Ctrl + s</td>
+<td>阻止屏幕输出</td>
+</tr>
+<tr>
+<td>Ctrl + q</td>
+<td>允许屏幕输出</td>
+</tr>
+<tr>
+<td>Ctrl + c</td>
+<td>终止命令</td>
+</tr>
+<tr>
+<td>Ctrl + z</td>
+<td>挂起命令</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Bang-命令"><a href="#Bang-命令" class="headerlink" title="Bang (!) 命令"></a>Bang (!) 命令</h3><table>
+<thead>
+<tr>
+<th>按键</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>!blah:p</td>
+<td>仅打印输出，而不执行</td>
+</tr>
+<tr>
+<td>!$</td>
+<td>上一条命令的最后一个参数，与 Alt + . 相同</td>
+</tr>
+<tr>
+<td>!$:p</td>
+<td>打印输出 !$ 的内容</td>
+</tr>
+<tr>
+<td>!*</td>
+<td>上一条命令的所有参数</td>
+</tr>
+<tr>
+<td>!*:p</td>
+<td>打印输出 !* 的内容</td>
+</tr>
+<tr>
+<td>^blah</td>
+<td>删除上一条命令中的 blah</td>
+</tr>
+<tr>
+<td>^blah^foo</td>
+<td>将上一条命令中的 blah 替换为 foo</td>
+</tr>
+<tr>
+<td>^blah^foo^</td>
+<td>将上一条命令中所有的 blah 都替换为 foo</td>
+</tr>
+<tr>
+<td>!!</td>
+<td>重复最后一次执行的命令。可能按下上箭头按键和 enter 键更容易些。</td>
+</tr>
+<tr>
+<td>!number</td>
+<td>重复历史列表中第 number 行的命令。</td>
+</tr>
+<tr>
+<td>!string</td>
+<td>重复最近历史列表中，以这个字符串开头的命令。</td>
+</tr>
+<tr>
+<td>!?string</td>
+<td>重复最近历史列表中，包含这个字符串的命令。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Mac-元键"><a href="#Mac-元键" class="headerlink" title="Mac 元键"></a>Mac 元键</h2><p>在 Windows 中 <kbd>Alt</kbd> 成为元键，上述的快捷键都有。同样的在 Mac 中是 <kbd>Option</kbd> ，不过默认情况下在终端中并没有作用，需要如下图所示的设置即可。</p>
+<p><img width="668" alt="2017-12-14 1 58 34" src="https://user-images.githubusercontent.com/24730006/33977746-53c2d3c4-e0d7-11e7-9547-680da820852f.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/bash-键盘高级操作技巧/" data-id="cjhdiq04100074km14q5nz79j" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/bash/">bash</a></li></ul>
+
     </footer>
   </div>
   
@@ -399,7 +594,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog/">&laquo; Prev</a><a class="page-number" href="/blog/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog/page/3/">3</a><a class="extend next" rel="next" href="/blog/page/3/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog/">&laquo; Prev</a><a class="page-number" href="/blog/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog/page/3/">3</a><a class="page-number" href="/blog/page/4/">4</a><a class="extend next" rel="next" href="/blog/page/3/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -420,7 +615,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/BigInt/">BigInt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES/">ES</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/TypeScript/">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/nodejs/">nodejs</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/BigInt/">BigInt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES/">ES</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/TypeScript/">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/nginx/">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/nodejs/">nodejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/sed/">sed</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a></li></ul>
     </div>
   </div>
 
@@ -430,7 +625,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog/tags/BigInt/" style="font-size: 10px;">BigInt</a> <a href="/blog/tags/ES/" style="font-size: 10px;">ES</a> <a href="/blog/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/blog/tags/nodejs/" style="font-size: 10px;">nodejs</a>
+      <a href="/blog/tags/BigInt/" style="font-size: 10px;">BigInt</a> <a href="/blog/tags/ES/" style="font-size: 10px;">ES</a> <a href="/blog/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/blog/tags/bash/" style="font-size: 10px;">bash</a> <a href="/blog/tags/git/" style="font-size: 20px;">git</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/nginx/" style="font-size: 20px;">nginx</a> <a href="/blog/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/blog/tags/nodejs/" style="font-size: 10px;">nodejs</a> <a href="/blog/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog/tags/ubuntu/" style="font-size: 10px;">ubuntu</a>
     </div>
   </div>
 
@@ -452,23 +647,23 @@
       <ul>
         
           <li>
-            <a href="/blog/2018/05/20/tool/VSCode-代码风格自动校验和格式化清单/">VSCode代码风格自动校验和格式化清单</a>
+            <a href="/blog/2018/05/20/nodejs/函数节流与函数防抖/">函数节流与函数防抖</a>
           </li>
         
           <li>
-            <a href="/blog/2018/05/20/nodejs/密码强度校验：先行断言正则与通用库/">密码强度校验：先行断言正则与通用库</a>
+            <a href="/blog/2018/05/20/nodejs/ES5中数组函数对空位的处理/">ES5中数组函数对空位的处理</a>
           </li>
         
           <li>
-            <a href="/blog/2018/05/20/linux/Ubuntu新建用户并赋予权限清单/">Ubuntu新建用户并赋予权限清单</a>
+            <a href="/blog/2018/05/20/linux/在git中新建一个空白分支/">在git中新建一个空白分支</a>
           </li>
         
           <li>
-            <a href="/blog/2018/05/20/linux/bash-键盘高级操作技巧/">bash 键盘高级操作技巧</a>
+            <a href="/blog/2018/05/20/linux/Debian-APT-Nginx-各个版本的区别/">Debian APT Nginx 各个版本的区别</a>
           </li>
         
           <li>
-            <a href="/blog/2018/05/20/tool/VSCode-一些技巧和快捷键/">VSCode一些技巧和快捷键</a>
+            <a href="/blog/2018/05/20/linux/Linux-sed-和-find-命令清单/">Linux sed 和 find 命令清单</a>
           </li>
         
       </ul>

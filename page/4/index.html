@@ -5,20 +5,19 @@
   
 
   
-  <title>Go 语言延迟调用和错误处理 | Lishude&#39;s Web Note</title>
+  <title>Lishude&#39;s Web Note</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Go 支持使用关键字 defer 创建函数内延迟语句（进栈），当函数在 return 之前，这些 defer 语句会按照先进后出执行（出栈）。 如下所示，在 test 函数 return 之前所有进入 defer 栈的语句都会先执行。 1234567891011121314151617181920package mainimport (	&quot;fmt&quot;)func main() &amp;#123;	res :">
+  <meta name="description" content="李书德的网络日志">
 <meta name="keywords" content="blog">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Go 语言延迟调用和错误处理">
-<meta property="og:url" content="https://islishude.github.io/blog/2018/05/20/golang/Go-语言延迟调用和错误处理/index.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Lishude&#39;s Web Note">
+<meta property="og:url" content="https://islishude.github.io/blog/page/4/index.html">
 <meta property="og:site_name" content="Lishude&#39;s Web Note">
-<meta property="og:description" content="Go 支持使用关键字 defer 创建函数内延迟语句（进栈），当函数在 return 之前，这些 defer 语句会按照先进后出执行（出栈）。 如下所示，在 test 函数 return 之前所有进入 defer 栈的语句都会先执行。 1234567891011121314151617181920package mainimport (	&quot;fmt&quot;)func main() &amp;#123;	res :">
+<meta property="og:description" content="李书德的网络日志">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:updated_time" content="2018-05-19T14:35:16.262Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Go 语言延迟调用和错误处理">
-<meta name="twitter:description" content="Go 支持使用关键字 defer 创建函数内延迟语句（进栈），当函数在 return 之前，这些 defer 语句会按照先进后出执行（出栈）。 如下所示，在 test 函数 return 之前所有进入 defer 栈的语句都会先执行。 1234567891011121314151617181920package mainimport (	&quot;fmt&quot;)func main() &amp;#123;	res :">
+<meta name="twitter:title" content="Lishude&#39;s Web Note">
+<meta name="twitter:description" content="李书德的网络日志">
   
     <link rel="alternate" href="/blog/atom.xml" title="Lishude&#39;s Web Note" type="application/atom+xml">
   
@@ -69,7 +68,9 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-golang/Go-语言延迟调用和错误处理" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main">
+  
+    <article id="post-golang/Go-语言延迟调用和错误处理" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog/2018/05/20/golang/Go-语言延迟调用和错误处理/" class="article-date">
   <time datetime="2018-05-19T22:25:27.000Z" itemprop="datePublished">2018-05-19</time>
@@ -86,8 +87,8 @@
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      Go 语言延迟调用和错误处理
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2018/05/20/golang/Go-语言延迟调用和错误处理/">Go 语言延迟调用和错误处理</a>
     </h1>
   
 
@@ -134,28 +135,188 @@
     </footer>
   </div>
   
-    
-<nav id="article-nav">
-  
-    <a href="/blog/2018/05/20/linux/为什么-git-pull-会修改文件权限和所属用户以及用户组？/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          为什么 git pull 会修改文件权限和所属用户以及用户组？
-        
-      </div>
-    </a>
-  
-  
-    <a href="/blog/2018/05/20/nodejs/不常见的-NPM-包管理技巧/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">不常见的 NPM 包管理技巧</div>
-    </a>
-  
-</nav>
+</article>
+
 
   
+    <article id="post-nodejs/不常见的-NPM-包管理技巧" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/2018/05/20/nodejs/不常见的-NPM-包管理技巧/" class="article-date">
+  <time datetime="2018-05-19T22:23:06.000Z" itemprop="datePublished">2018-05-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Node-js/">Node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2018/05/20/nodejs/不常见的-NPM-包管理技巧/">不常见的 NPM 包管理技巧</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>除了使用 npmjs.com 这个集中包托管网站，npm 还可以使用 Git 和本地包来安装。</p>
+<p>和正常的 npm install package-name 语法一样，只不过下面的 package-name 全部换成了 url。</p>
+<h2 id="使用-Git-包"><a href="#使用-Git-包" class="headerlink" title="使用 Git 包"></a>使用 Git 包</h2><p>官方在文档里定义的 url 的格式是 <code>&lt;protocol&gt;://[&lt;user&gt;[:&lt;password&gt;]@]&lt;hostname&gt;[:&lt;port&gt;][:][/]&lt;path&gt;[#&lt;commit-ish&gt; | #semver:&lt;semver&gt;]</code></p>
+<p>其中 <code>&lt;protocol&gt;</code> 可以是 <code>git</code>，<code>git+ssh</code>，<code>git+http</code>，<code>git+https</code>，或者 <code>git+file</code>。而 <code>#&lt;commit-ish&gt;</code> 可以选择 commit 的点，<code>#semver:&lt;semver&gt;</code> 是选择 tag 并且支持语义化版本，如此以来我们不用发布到 npm 也能使用包了！在 Golang 中就是这样这样进行包管理，不过知道 Go 1.10 还没有确定的版本管理方案。这里官方文档并没有说明可以使用 branch，其实是可以的，具体可以参考下述的格式示例。</p>
+<p>如果没有使用 <code>commit-ish</code> 或者 <code>semver</code> 会直接使用 master 分支，最后使用 <code>npm install git-url</code> 安装即可， package.json 新增了一些包名称字段，这些名称就是相应包中 package.json 定义的 name 字段：</p>
+<p>各种格式示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&quot;dependencies&quot;: &#123;</span><br><span class="line">    // semver(by tag)</span><br><span class="line">    &quot;random.ts&quot;: &quot;git+https://github.com/isLishude/random.ts.git#semver:^2.0.0&quot;,</span><br><span class="line">    // branch</span><br><span class="line">    &quot;random.ts&quot;: &quot;git+ssh://git@github.com/isLishude/random.ts.git#dev&quot;,</span><br><span class="line">     // master</span><br><span class="line">    &quot;random.ts&quot;: &quot;git+ssh://git@github.com/isLishude/random.ts.git&quot;,</span><br><span class="line">     // commit-ish</span><br><span class="line">    &quot;random.ts&quot;: &quot;git+ssh://git@github.com/isLishude/random.ts.git#9d22109491&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果是 GitHub 的话更简单了，安装命令直接使用 <code>npm install username/repository</code> 就可以了，也可以使用 branch 以及 semver tag。</p>
+<h2 id="使用本地包"><a href="#使用本地包" class="headerlink" title="使用本地包"></a>使用本地包</h2><p><code>require</code> 引用当前项目的其它文件需要使用相对路径的地址，如果层级关系太多，就会写很多 <code>../</code>，有一种本地包的方式可以很好的解决。</p>
+<p>配置很简单，类似当前项目一样，新建一个用于当前项目的包目录并且包括 <code>package.json</code> 文件，如本项目所示，在本项目 <code>helper</code> 目录下定义 <code>local-helper</code> 包。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"local-helper"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">"local heleper functions"</span>,</span><br><span class="line">  <span class="attr">"main"</span>: <span class="string">"index.js"</span>,</span><br><span class="line">  <span class="attr">"license"</span>: <span class="string">"ISC"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后在项目使用 <code>npm install file:package-path</code> 就可以了，例如此项目就使用 <code>npm install file:./helper</code>。最后就可以看到在 <code>package.json</code> 文件 <code>dependencies</code> 字段新增了 <code>&quot;local-helper&quot;: &quot;file:helper&quot;</code> 。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">"dependencies": &#123;</span><br><span class="line">    "local-helper": "file:helper"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><ul>
+<li><a href="https://github.com/adesight/npm-import-url" target="_blank" rel="noopener">https://github.com/adesight/npm-import-url</a></li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://docs.npmjs.com/files/package.json#urls-as-dependencies" target="_blank" rel="noopener">https://docs.npmjs.com/files/package.json#urls-as-dependencies</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/不常见的-NPM-包管理技巧/" data-id="cjhdiq04i00104km1hk10tpio" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Node-js/">Node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
+
+
+  
+    <article id="post-nodejs/JS-BigInt-尝鲜" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/2018/05/20/nodejs/JS-BigInt-尝鲜/" class="article-date">
+  <time datetime="2018-05-19T22:20:54.000Z" itemprop="datePublished">2018-05-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Node-js/">Node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2018/05/20/nodejs/JS-BigInt-尝鲜/">JS BigInt 尝鲜</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>JavaScript 所有数字内部都是 Double64 类型，所以数值的精度最多只能到 53 个二进制位，大于这个范围的整数是无法精确表示的。</p>
+<p><img width="456" alt="2018-05-01 10 09 59" src="https://user-images.githubusercontent.com/24730006/39458512-d661b1a8-4d27-11e8-805c-01b5fd3a060f.png"></p>
+<p>在很多金融场景如果使用 JS 的话就得使用一些 BigNumber 库。其中以太坊 web3.js 使用的是最为流行的是 <a href="https://github.com/MikeMcl/bignumber.js" target="_blank" rel="noopener">bignumber.js</a>，并且包含 <code>.d.ts</code> 类型提示，推荐在生产环境使用。</p>
+<p>因为这些库表示大数的方式是以 16 进制字符串表示的，通常在实践中还需要使用 <code>Buffer.from()</code> 转换成二进制对象，还是有很多不方便，需要写很多辅助函数。不过以后我们就可以使用官方标准库中的 BigInt 了。</p>
+<p>目前（2018年5月1日）BigInt 提案已经进入 TC39 stage 3，不过还是被 V8 引擎提前实现，本文所有代码示例基于 Chrome Canary  68.0.3415.0，如下图所示。</p>
+<p><img width="518" alt="2018-05-01 9 10 04" src="https://user-images.githubusercontent.com/24730006/39457635-ba564466-4d21-11e8-9d91-f1cab5e5854e.png"></p>
+<p>BigInt 表示没有精度和大小限制的整数，为了兼容性考虑，在数字后面添加后缀<code>n</code> 和普通数字类型区分，使用二进制八进制和十六进制也可以表示。</p>
+<p><img width="380" alt="2018-05-01 9 49 05" src="https://user-images.githubusercontent.com/24730006/39458122-ee49152a-4d24-11e8-9397-34397d74197b.png"></p>
+<p>数字的字符串形式可以类似于 <code>Number()</code> 使用 <code>BigInt()</code> 直接转换为 BigInt，需要注意的是参数检查和 Number() 是一致的，是不能使用 <code>123n</code> 字符串形式的参数，不过提案中还有一个静态函数 <code>BigInt.paseInt()</code> 目前V8 还没支持。</p>
+<p><img width="466" alt="2018-05-01 9 48 07" src="https://user-images.githubusercontent.com/24730006/39458109-cba3ee14-4d24-11e8-8de2-e17606b12df6.png"></p>
+<p>BitInt 除了不能和 number 类型直接运算之外，其它方面和普通的数值运算没有多少区别，除法运算始终返回整数形式。</p>
+<p><img width="523" alt="2018-05-01 9 46 51" src="https://user-images.githubusercontent.com/24730006/39458079-9dae0a3a-4d24-11e8-9959-6286c065cf6b.png"></p>
+<p>BigInt 也存在隐式转换，在相等运算符<code>==</code>、不同类型运算以及强制类型转化函数，都还存在 JS 远古传统。</p>
+<p><img width="510" alt="2018-05-01 9 51 43" src="https://user-images.githubusercontent.com/24730006/39458223-8cffd2e4-4d25-11e8-9550-9b3d8165b20f.png"></p>
+<p>更多内容可以参考 <a href="https://github.com/tc39/proposal-bigint" target="_blank" rel="noopener">BigInt 提案</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/JS-BigInt-尝鲜/" data-id="cjhdiq04d000q4km1yhhw8ot5" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/BigInt/">BigInt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/ES/">ES</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-nodejs/TypeScript-导入-JSON-Module" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/2018/05/20/nodejs/TypeScript-导入-JSON-Module/" class="article-date">
+  <time datetime="2018-05-19T21:15:26.000Z" itemprop="datePublished">2018-05-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Node-js/">Node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2018/05/20/nodejs/TypeScript-导入-JSON-Module/">TypeScript 导入 JSON Module</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是我在知乎问题 <a href="https://www.zhihu.com/question/276172039/answer/393798011" target="_blank" rel="noopener">Typescript有什么冷门但是很好用的特性?</a> 的回答。</p>
+<p>Node.js 模块是允许直接导入 JSON 文件的，但是 ES Module 现在还不支持，TS 在 2.9 （18年5月17日还未发布）之前也不支持。日常中使用 JSON 最多的场景就是 配置文件了，如果要使用的话需要使用下面一些 trick 来支持。</p>
+<p>这里有个 JSON 文件</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"//"</span>: <span class="string">"student.json"</span>,</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"test"</span>,</span><br><span class="line">  <span class="attr">"age"</span>: <span class="number">23</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果需要导入的话，需要先定义类型。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// student.d.ts</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> "*student.json" &#123;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">interface</span> IStudent &#123;</span><br><span class="line">    name: <span class="built_in">string</span>;</span><br><span class="line">    age: <span class="built_in">number</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">const</span> student: IStudent</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里使用 <code>*student.json</code> 是因为导入的时候有路径符号，这里要用 <code>*</code> 匹配。</p>
+<p>最后在 tsconfig.json 文件中包含这些类型定义文件。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"//"</span>: <span class="string">"tsconfig.json"</span>,</span><br><span class="line">  <span class="attr">"include"</span>: [<span class="string">"src/**/*"</span>, <span class="string">"./myTypes/*.d.ts"</span>],</span><br><span class="line">  <span class="attr">"exclude"</span>: [<span class="string">"node_modules"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在我们就可以直接在文件中引入了，TS 会智能的提示类型。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; log &#125; <span class="keyword">from</span> <span class="string">"console"</span>;</span><br><span class="line"><span class="comment">// 路径为 `./student.json` </span></span><br><span class="line"><span class="comment">// 所以上面声明模块时用了通配符 `declare module "*student.json"`</span></span><br><span class="line"><span class="keyword">import</span> &#123; student &#125; <span class="keyword">from</span> <span class="string">"./student.json"</span>;</span><br><span class="line"></span><br><span class="line">log(student.age);</span><br><span class="line">log(student.name);</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/Microsoft/TypeScript/wiki/Roadmap#29-may-2018" target="_blank" rel="noopener">TypeScript 2.9</a> 即将发布，到时候就可以直接使用 JsonModule 了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/TypeScript-导入-JSON-Module/" data-id="cjhdiq04f000u4km1zfs7r1dk" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/TypeScript/">TypeScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/blog/page/3/">&laquo; Prev</a><a class="page-number" href="/blog/">1</a><a class="page-number" href="/blog/page/2/">2</a><a class="page-number" href="/blog/page/3/">3</a><span class="page-number current">4</span>
+  </nav>
 
 </section>
         

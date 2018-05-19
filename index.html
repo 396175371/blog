@@ -70,62 +70,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-tool/VSCode-代码风格自动校验和格式化清单" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-nodejs/函数节流与函数防抖" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2018/05/20/tool/VSCode-代码风格自动校验和格式化清单/" class="article-date">
-  <time datetime="2018-05-19T22:44:40.000Z" itemprop="datePublished">2018-05-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog/categories/tool/">tool</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog/2018/05/20/tool/VSCode-代码风格自动校验和格式化清单/">VSCode代码风格自动校验和格式化清单</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>vscode 提供了很多优秀的插件，对于代码风格校验和代码格式化，我最常用的是 eslint 和 prettier，eslint 自不必说，第二个是代码格式化插件，不仅可以对 js html css 格式化，还可以对 sass 以及 json 等进行格式化。</p>
-<p>当然格式化的标准编辑器不太同意，比如函数表达式中函数名后面带空格与否，prettier 默认的是不带空格，不过团队中常用的是 JS Standard 是有空格的，更别提字符串用双引号还是单引号，表达式后面跟不跟分号这样的风格差异的问题了。</p>
-<p>不过还好的是 eslint 和 prettier 二者可以结合自动对代码进行格式化。</p>
-<p>首先，在 vscode 市场安装 eslint 和 prettier 两个插件。</p>
-<p>然后我们需要在项目中再安装 eslint 的包。</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yarn add eslint --dev</span><br><span class="line">npm i -D eslint</span><br></pre></td></tr></table></figure>
-<p>eslint 提示的是也可以全局安装，<del>但是我全局安装之后并没有作用</del>，必须使用 npm 而不是 yarn 安装才可以。我觉得为了团队其他人的更简单使用，建议还是在 package.json 中安装 eslint。</p>
-<p>打开 vscode 的设置，mac下是 code -&gt; 首选项 -&gt; 设置，windows下是 文件 -&gt; 首选项 -&gt; 设置，在搜索设置中更改下列配置。</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;  </span><br><span class="line">  <span class="attr">"eslint.validate"</span>: [</span><br><span class="line">    <span class="string">"javascript"</span>,</span><br><span class="line">    <span class="string">"javascriptreact"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">"editor.formatOnSave"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"prettier.eslintIntegration"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"eslint.autoFixOnSave"</span>: <span class="literal">true</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>对 JS 进行检查，我们需要对添加 eslint 设置，首先添加 <code>.eslintrc.js</code> ，这里添加 <code>standard</code> 风格，更多可以在 eslint 网站查看。这里我们使用命令行自动生成，运行<code>eslint --init</code>，然后选择 <code>Use a popular style guide</code> 按照提示操作，如下可做参考。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">? How would you like to configure ESLint? Use a popular style guide</span><br><span class="line">? Which style guide do you want to follow? Standard</span><br><span class="line">? What format do you want your config file to be in? JavaScript</span><br><span class="line">Checking peerDependencies of eslint-config-standard@latest</span><br><span class="line">Installing eslint-config-standard@latest, eslint-plugin-import@&gt;=2.2.0, eslint-plugin-node@&gt;=4.2.2, eslint-plugin-promise@&gt;=3.5.0, eslint-plugin-standard@&gt;=3.0.0</span><br><span class="line">npm notice created a lockfile as package-lock.json. You should commit this file.</span><br><span class="line">npm WARN eslint-config-standard@10.2.1 requires a peer of eslint@&gt;=3.19.0 but none is installed. You must install peer dependencies yourself.</span><br><span class="line">npm WARN eslint-plugin-standard@3.0.1 requires a peer of eslint@&gt;=3.19.0 but none is installed. You must install peer dependencies yourself.</span><br><span class="line">npm WARN eslint-plugin-node@5.2.1 requires a peer of eslint@&gt;=3.1.0 but none is installed. You must install peer dependencies yourself.</span><br><span class="line">npm WARN eslint-plugin-import@2.8.0 requires a peer of eslint@2.x - 4.x but none is installed. You must install peer dependencies yourself.</span><br><span class="line"></span><br><span class="line">+ eslint-config-standard@10.2.1</span><br><span class="line">+ eslint-plugin-standard@3.0.1</span><br><span class="line">+ eslint-plugin-promise@3.6.0</span><br><span class="line">+ eslint-plugin-node@5.2.1</span><br><span class="line">+ eslint-plugin-import@2.8.0</span><br><span class="line">added 53 packages in 9.873s</span><br><span class="line">Successfully created .eslintrc.js file in C:\Users\Lishude\Desktop\project\express</span><br></pre></td></tr></table></figure>
-<p>这样我们在项目中只要 <code>Ctrl+s</code> 就可以自动格式了。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/tool/VSCode-代码风格自动校验和格式化清单/" data-id="cjhdid90f0007pwm121ms22x8" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-nodejs/密码强度校验：先行断言正则与通用库" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog/2018/05/20/nodejs/密码强度校验：先行断言正则与通用库/" class="article-date">
-  <time datetime="2018-05-19T22:43:49.000Z" itemprop="datePublished">2018-05-19</time>
+    <a href="/blog/2018/05/20/nodejs/函数节流与函数防抖/" class="article-date">
+  <time datetime="2018-05-19T22:57:59.000Z" itemprop="datePublished">2018-05-19</time>
 </a>
     
   <div class="article-category">
@@ -140,7 +88,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/blog/2018/05/20/nodejs/密码强度校验：先行断言正则与通用库/">密码强度校验：先行断言正则与通用库</a>
+      <a class="article-title" href="/blog/2018/05/20/nodejs/函数节流与函数防抖/">函数节流与函数防抖</a>
     </h1>
   
 
@@ -148,27 +96,37 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在用户注册业务场景中，一般而言的用户密码强度：密码至少8个字符，包括1个大写字母，1个小写字母和1个数字或特殊字符。本文原本转载来自<a href="http://www.css88.com/archives/8100" target="_blank" rel="noopener">css88</a>的一篇整理，但是其内容只是简单说明了几种验证密码强度正则的写法，比如说 <code>/^(?=.*\d)(?=.*[a-zA-Z]).{6,20}$/</code> ，这里用了「先行断言」，之前自己对此理解不太准确，本文就是附带讲解这个概念来一步一步说明密码强度正则的写法。</p>
-<h2 id="先行断言"><a href="#先行断言" class="headerlink" title="先行断言"></a>先行断言</h2><p>先行断言（Positive look-ahead）的语法形式为 <code>x(?=y)</code>，意思就是 x 只有在 y 前面才匹配，并且 y 不会被计入返回结果。</p>
-<p>如果要匹配一个 70% 中的数字，就可以写成 <code>/\d+(?=%)/</code>。</p>
-<p>先行断言很容易让人误解，比如说上面举例的密码强度表达式（<code>/^(?=.*\d)(?=.*[a-zA-Z]).{6,20}$/</code>）中的先行断言前面并没有任何字符，它其实<strong>只是匹配某些位置不占用字符</strong>，所以匹配返回的内容是不包括先行断言内的内容的。</p>
-<p>下面使用 JavaScript 具体说明：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> res = <span class="regexp">/(?=\d)[a-z]/</span>.test(<span class="string">"1h"</span>)</span><br></pre></td></tr></table></figure>
-<p>那么<code>res</code> 的返回结果是？肯定有人说是 <code>true</code> 但是正确结果为 <code>false</code>。</p>
-<p>接下来来分析一下，想象一个指针在字符串 <code>1h</code> 上移动，那么根据上面例子的正则，指针会在 <code>1h</code> 之前，用下划线指代指针的话，指针的位置就是 <code>_1h</code> 的，但是 <code>(?=\d)[a-z]</code> 要求后面的字符是不是数字而是小写字母，所以就匹配不了。</p>
-<p>那么，我们稍微修改一下，现在就匹配了。也就是说<strong>断言不消耗字符</strong>，如果找不到断言就不匹配。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/(?=\d)\d[a-z]/.test(<span class="string">"1h"</span>)</span><br></pre></td></tr></table></figure>
-<p>那么再说明密码强度的正则就简单了。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&amp;])[A-Za-z\d$@$!%*#?&amp;]&#123;6,&#125;$/</span><br></pre></td></tr></table></figure>
-<p>在断言中加入 <code>.</code> 代表任意字符，那么就是匹配整个密码字符串。</p>
-<h2 id="密码强度库"><a href="#密码强度库" class="headerlink" title="密码强度库"></a>密码强度库</h2><p>除了正则之外，还有一个业界通用的密码强度库 Dropbox 的 <a href="https://github.com/dropbox/zxcvbn" target="_blank" rel="noopener">zxcvbn</a>。</p>
-<p>库名字很好记就是键盘字符第三排的字母，另外根据统计取这样密码的用户很多。</p>
-<p>zxcvbn 覆盖了所有主流的语言，包括 JS PHP Python 等，前端也可以直接引入，不过我并不推荐，因为包太大了，足有 800K。如果前端使用的话，最好还是使用正则。</p>
+        <h2 id="什么是函数节流与函数防抖"><a href="#什么是函数节流与函数防抖" class="headerlink" title="什么是函数节流与函数防抖"></a>什么是函数节流与函数防抖</h2><p>举个栗子，我们知道目前的一种说法是当 1 秒内连续播放 24 张以上的图片时，在人眼的视觉中就会形成一个连贯的动画，所以在电影的播放（以前是，现在不知道）中基本是以每秒 24 张的速度播放的，为什么不 100 张或更多是因为 24 张就可以满足人类视觉需求的时候，100 张就会显得很浪费资源。再举个栗子，假设电梯一次只能载一人的话，10 个人要上楼的话电梯就得走 10 次，是一种浪费资源的行为；而实际生活正显然不是这样的，当电梯里有人准备上楼的时候如果外面又有人按电梯的话，电梯会再次打开直到满载位置，从电梯的角度来说，这时一种节约资源的行为（相对于一次只能载一个人）。</p>
+<ul>
+<li>函数节流: 指定时间间隔内只会执行一次任务；</li>
+<li>函数防抖: 任务频繁触发的情况下，只有任务触发的间隔超过指定间隔的时候，任务才会执行。</li>
+</ul>
+<blockquote>
+<p>函数节流的核心是，让一个函数不要执行得太频繁，减少一些过快的调用来节流。函数去抖就是对于一定时间段的连续的函数调用，只让其执行一次。</p>
+</blockquote>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="函数节流"><a href="#函数节流" class="headerlink" title="函数节流"></a>函数节流</h3><p>函数节流应用的实际场景，多数在监听页面元素滚动事件的时候会用到。因为滚动事件，是一个高频触发的事件。以下是监听页面元素滚动的示例代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">throttle</span>(<span class="params">fn, wait</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> previous = <span class="number">0</span></span><br><span class="line">    <span class="keyword">var</span> timer = <span class="literal">null</span></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> context = <span class="keyword">this</span></span><br><span class="line">        <span class="keyword">var</span> args = <span class="built_in">arguments</span></span><br><span class="line">        <span class="keyword">if</span> (!previous) &#123;</span><br><span class="line">            previous = <span class="built_in">Date</span>.now()</span><br><span class="line">            fn.apply(context, args)</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (previous + wait &gt;= <span class="built_in">Date</span>.now()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">                <span class="comment">// console.log(timer)</span></span><br><span class="line">                clearTimeout(timer)</span><br><span class="line">                timer = <span class="literal">null</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// console.log(timer)</span></span><br><span class="line">            timer = setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                <span class="comment">// console.log(timer)</span></span><br><span class="line">                previous = <span class="built_in">Date</span>.now()</span><br><span class="line">                fn.apply(context, args)</span><br><span class="line">            &#125;, wait)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            previous = <span class="built_in">Date</span>.now()</span><br><span class="line">            fn.apply(context, args)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="throttle-应用场景"><a href="#throttle-应用场景" class="headerlink" title="throttle 应用场景"></a>throttle 应用场景</h3><p>函数节流有哪些应用场景？哪些时候我们需要间隔一定时间触发回调来控制函数调用频率？</p>
+<ul>
+<li>DOM 元素的拖拽功能实现（mousemove）</li>
+<li>射击游戏的 mousedown/keydown 事件（单位时间只能发射一颗子弹）</li>
+<li>计算鼠标移动的距离（mousemove）</li>
+<li>Canvas 模拟画板功能（mousemove）</li>
+<li>搜索联想（keyup）</li>
+<li>监听滚动事件判断是否到页面底部自动加载更多：给 scroll 加了 debounce 后，只有用户停止滚动后，才会判断是否到了页面底部；如果是 throttle 的话，只要页面滚动就会间隔一段时间判断一次</li>
+</ul>
+<h3 id="函数防抖"><a href="#函数防抖" class="headerlink" title="函数防抖"></a>函数防抖</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">debounce</span>(<span class="params">fn, wait</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> timer = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> context = <span class="keyword">this</span></span><br><span class="line">        <span class="keyword">var</span> args = <span class="built_in">arguments</span></span><br><span class="line">        <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">            clearTimeout(timer);</span><br><span class="line">            timer = <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        timer = setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            fn.apply(context, args)</span><br><span class="line">        &#125;, wait)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="debounce-应用场景"><a href="#debounce-应用场景" class="headerlink" title="debounce 应用场景"></a>debounce 应用场景</h3><p>函数去抖有哪些应用场景？哪些时候对于连续的事件响应我们只需要执行一次回调？</p>
+<ul>
+<li>每次 resize/scroll 触发统计事件</li>
+<li>文本输入的验证（连续输入文字后发送 AJAX 请求进行验证，验证一次就好）</li>
+</ul>
+<p>ref: <a href="http://justclear.gitlab.io/throttle-and-debounce/" target="_blank" rel="noopener">http://justclear.gitlab.io/throttle-and-debounce/</a><br>ref: <a href="https://segmentfault.com/a/1190000008768202" target="_blank" rel="noopener">https://segmentfault.com/a/1190000008768202</a><br>ref: <a href="https://github.com/hanzichi/underscore-analysis/issues/20" target="_blank" rel="noopener">https://github.com/hanzichi/underscore-analysis/issues/20</a><br>ref: <a href="http://www.cnblogs.com/fsjohnhuang/p/4147810.html" target="_blank" rel="noopener">http://www.cnblogs.com/fsjohnhuang/p/4147810.html</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/密码强度校验：先行断言正则与通用库/" data-id="cjhdid90q000mpwm1mry5vkqm" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/函数节流与函数防抖/" data-id="cjhdiq04k00134km1o123n70x" class="article-share-link">Share</a>
       
       
     </footer>
@@ -178,10 +136,68 @@
 
 
   
-    <article id="post-linux/Ubuntu新建用户并赋予权限清单" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-nodejs/ES5中数组函数对空位的处理" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2018/05/20/linux/Ubuntu新建用户并赋予权限清单/" class="article-date">
-  <time datetime="2018-05-19T22:43:02.000Z" itemprop="datePublished">2018-05-19</time>
+    <a href="/blog/2018/05/20/nodejs/ES5中数组函数对空位的处理/" class="article-date">
+  <time datetime="2018-05-19T22:56:41.000Z" itemprop="datePublished">2018-05-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Node-js/">Node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2018/05/20/nodejs/ES5中数组函数对空位的处理/">ES5中数组函数对空位的处理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>数组的空位指，数组的某一个位置没有任何值。比如，Array构造函数返回的数组都是空位。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>(<span class="number">3</span>) <span class="comment">// [, , ,]</span></span><br></pre></td></tr></table></figure>
+<p>上面代码中，Array(3)返回一个具有3个空位的数组。</p>
+<p>注意，空位不是undefined，一个位置的值等于undefined，依然是有值的。空位是没有任何值，in运算符可以说明这一点。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span> <span class="keyword">in</span> [<span class="literal">undefined</span>, <span class="literal">undefined</span>, <span class="literal">undefined</span>] <span class="comment">// true</span></span><br><span class="line"><span class="number">0</span> <span class="keyword">in</span> [, , ,] <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<p>上面代码说明，第一个数组的0号位置是有值的，第二个数组的0号位置没有值。通过<code>apply</code>方法，利用<code>Array</code>构造函数将数组的空元素变成undefined。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.apply(<span class="literal">null</span>, [<span class="string">"a"</span>,,<span class="string">"b"</span>])</span><br><span class="line"><span class="comment">// [ 'a', undefined, 'b' ]</span></span><br></pre></td></tr></table></figure>
+<p>ES5 对空位的处理，已经很不一致了，大多数情况下会忽略空位。</p>
+<ul>
+<li>forEach()，filter()，every() 和some()， reduce() 都会跳过空位。</li>
+<li>map()会跳过空位，但会保留这个值(位置)</li>
+<li>join()和toString()会将空位视为undefined，而undefined和null会被处理成空字符串。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// forEach方法</span></span><br><span class="line">[,<span class="string">'a'</span>].forEach(<span class="function">(<span class="params">x,i</span>) =&gt;</span> <span class="built_in">console</span>.log(i)); <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// filter方法</span></span><br><span class="line">[<span class="string">'a'</span>,,<span class="string">'b'</span>].filter(<span class="function"><span class="params">x</span> =&gt;</span> <span class="literal">true</span>) <span class="comment">// ['a','b']</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// every方法</span></span><br><span class="line">[,<span class="string">'a'</span>].every(<span class="function"><span class="params">x</span> =&gt;</span> x===<span class="string">'a'</span>) <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// some方法</span></span><br><span class="line">[,<span class="string">'a'</span>].some(<span class="function"><span class="params">x</span> =&gt;</span> x !== <span class="string">'a'</span>) <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// map方法</span></span><br><span class="line">[,<span class="string">'a'</span>].map(<span class="function"><span class="params">x</span> =&gt;</span> <span class="number">1</span>) <span class="comment">// [,1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// join方法</span></span><br><span class="line">[,<span class="string">'a'</span>,<span class="literal">undefined</span>,<span class="literal">null</span>].join(<span class="string">'#'</span>) <span class="comment">// "#a##"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// toString方法</span></span><br><span class="line">[,<span class="string">'a'</span>,<span class="literal">undefined</span>,<span class="literal">null</span>].toString() <span class="comment">// ",a,,"</span></span><br></pre></td></tr></table></figure>
+<p>ES6 则是明确将空位转为undefined。</p>
+<p>现在有个面试题，移除数组的空位，我们就可以利用 <code>filter</code> 或者 <code>forEach</code> 等方法。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeEmpty</span>(<span class="params">arr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> arr.filter(<span class="function"><span class="params">n</span> =&gt;</span> n)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ref: <a href="http://es6.ruanyifeng.com/#docs/array#数组的空位" target="_blank" rel="noopener">http://es6.ruanyifeng.com/#docs/array#数组的空位</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/ES5中数组函数对空位的处理/" data-id="cjhdiq04a000k4km1m0aq01jc" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-linux/在git中新建一个空白分支" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/2018/05/20/linux/在git中新建一个空白分支/" class="article-date">
+  <time datetime="2018-05-19T22:55:35.000Z" itemprop="datePublished">2018-05-19</time>
 </a>
     
   <div class="article-category">
@@ -196,7 +212,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/blog/2018/05/20/linux/Ubuntu新建用户并赋予权限清单/">Ubuntu新建用户并赋予权限清单</a>
+      <a class="article-title" href="/blog/2018/05/20/linux/在git中新建一个空白分支/">在git中新建一个空白分支</a>
     </h1>
   
 
@@ -204,35 +220,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>通常新建用户会遇到很多问题，比如 shell 不支持 tab 提示，下述流程解决了常见新建用户出现的问题。</p>
-<h2 id="新建用户"><a href="#新建用户" class="headerlink" title="新建用户"></a>新建用户</h2><p>首先在建立一个用户家目录，一般建立在 <code>/home</code> 下，目录名一般直接使用用户名。接着使用 <code>useradd</code> 命令继续，命令结构如下。</p>
-<p><code>useradd -d HOME-DIR -s /bin/bash -c COMMET -G GOURP-NAME USER-NAME</code></p>
-<p><code>-d</code> 指示用户家目录，使用刚才新建的目录即可。<code>-c</code> 指定注释。</p>
-<p><code>-s</code> 指定 shell，默认是不指定的，一定要加上，要不然就会出现上述说的问题。</p>
-<p> <code>-G</code> 指定用户组，之后也可以使用 <code>usermod -aG GROUP-NAME USER-NAME</code> 进行添加。</p>
-<p>最后再加上用户名称即可。</p>
-<p>值得注意的是 <code>-p</code> 可以指定登录密码，但是我尝试过没有成功。还有一个方式指定密码，使用 <code>passwd USER-NAME</code> 即可。</p>
-<p>详细的参数在文后有说明。然后给用户家目录赋权</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chown -R user:group /home/user</span><br><span class="line">sudo chmod -R 770 /home/user</span><br></pre></td></tr></table></figure>
-<p>最后复制shell模板到家目录</p>
-<p><code>sudo /etc/skel/.bashrc /home/user</code></p>
-<h2 id="root-权限"><a href="#root-权限" class="headerlink" title="root 权限"></a>root 权限</h2><p>编辑 <code>/etc/sudoers</code> </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># User privilege specification</span><br><span class="line">root	ALL=(ALL:ALL) ALL</span><br><span class="line">user  ALL=(ALL:ALL) ALL</span><br></pre></td></tr></table></figure>
-<p>之前提及过 usermod 可以把用户添加到用户组，在 <code>/etc/sudoers</code> 后有说明将用户添加 <code>sudo</code> 组就可以使用 <code>sudo</code> 命令获取管理权限，在 CentOS上通常是 wheel 组而不是 sudo 组。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Allow members of group sudo to execute any command</span><br><span class="line">%sudo	ALL=(ALL:ALL) ALL</span><br></pre></td></tr></table></figure>
-<p>第一个“ALL”表示该规则适用于所有主机，第二个表示root用户可以像所有用户一样运行命令，第三个表示root用户可以像所有组一样运行命令，最后一个“ALL”表示这些规则适用于所有命令。详情可参考<a href="https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos" target="_blank" rel="noopener">这里</a>。</p>
-<p>如果已经在命令中设置将新用户加入 root sudo 用户组的，以上的规则设定也可以不用。</p>
-<p>最后退出当前用户，重新使用新用户登录试一试吧！</p>
-<h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><p>更简单的命令，直接会创建用户家目录以及将 .bashrc 等文件移动到用户家目录。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd --create-home username</span><br></pre></td></tr></table></figure>
-<h2 id="useradd-命令清单"><a href="#useradd-命令清单" class="headerlink" title="useradd 命令清单"></a>useradd 命令清单</h2><p><img width="649" alt="2018-03-17 5 10 34" src="https://user-images.githubusercontent.com/24730006/37553587-2ea56f52-2a06-11e8-82d7-d638abbfe5c9.png"></p>
+        <p>当我们有一个有一个完全重构的新版本要开始的时候，比如第一版本用的 Angular，第二版选择 React，我们需要在我们的项目工程新建一个完全空白的分支，也就是说新分支完全没有任何 commit 记录，但是会保留所有文件。</p>
+<p>以我的一个 gulp-stater 项目为例，现在只有一个 master 分支，也有很多提交，现在我们需要新建一个空白分支。</p>
+<p><img src="https://user-images.githubusercontent.com/24730006/28444190-f3c74c22-6ded-11e7-9b5c-8f1967e74373.png" alt="image"></p>
+<p>现在我们只要运行<code>git checkout --orphan new-branch-name</code>就可以了。</p>
+<p><img src="https://user-images.githubusercontent.com/24730006/28444218-31a69606-6dee-11e7-9c82-ee7df84388a3.png" alt="image"></p>
+<p>我们可以按照提示使用  <code>git rm --cached &lt;file&gt;</code>  把不需要的文件删除，这里的 <code>file</code> 可以用 <code>*</code> 代替全部文件。当然我们也可以使用 <code>git rm -rf .</code>代替。</p>
+<p>注意：这里的所有文件都是 <code>.gitignore</code> 未忽略的，也就是有过提交记录的，只不过现在在缓存区。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/Ubuntu新建用户并赋予权限清单/" data-id="cjhdid90c0004pwm1nmfdtv0n" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/在git中新建一个空白分支/" data-id="cjhdiq04c000o4km1jtiafgky" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/git/">git</a></li></ul>
+
     </footer>
   </div>
   
@@ -240,10 +243,10 @@
 
 
   
-    <article id="post-linux/bash-键盘高级操作技巧" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-linux/Debian-APT-Nginx-各个版本的区别" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2018/05/20/linux/bash-键盘高级操作技巧/" class="article-date">
-  <time datetime="2018-05-19T22:40:43.000Z" itemprop="datePublished">2018-05-19</time>
+    <a href="/blog/2018/05/20/linux/Debian-APT-Nginx-各个版本的区别/" class="article-date">
+  <time datetime="2018-05-19T22:53:19.000Z" itemprop="datePublished">2018-05-19</time>
 </a>
     
   <div class="article-category">
@@ -258,7 +261,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/blog/2018/05/20/linux/bash-键盘高级操作技巧/">bash 键盘高级操作技巧</a>
+      <a class="article-title" href="/blog/2018/05/20/linux/Debian-APT-Nginx-各个版本的区别/">Debian APT Nginx 各个版本的区别</a>
     </h1>
   
 
@@ -266,247 +269,52 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="移动光标"><a href="#移动光标" class="headerlink" title="移动光标"></a>移动光标</h3><table>
-<thead>
-<tr>
-<th>按键</th>
-<th>行为</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Ctrl-a</td>
-<td>移动光标到行首。</td>
-</tr>
-<tr>
-<td>Ctrl-e</td>
-<td>移动光标到行尾。</td>
-</tr>
-<tr>
-<td>Ctrl-f</td>
-<td>光标前移一个字符；和右箭头作用一样。</td>
-</tr>
-<tr>
-<td>Ctrl-b</td>
-<td>光标后移一个字符；和左箭头作用一样。</td>
-</tr>
-<tr>
-<td>Alt-f</td>
-<td>光标前移一个字（word\单词）。</td>
-</tr>
-<tr>
-<td>Alt-b</td>
-<td>光标后移一个字（word\单词）。</td>
-</tr>
-<tr>
-<td>Ctrl-l</td>
-<td>清空屏幕，移动光标到左上角。clear 命令完成同样的工作。</td>
-</tr>
-</tbody>
-</table>
-<h3 id="文本编辑命令"><a href="#文本编辑命令" class="headerlink" title="文本编辑命令"></a>文本编辑命令</h3><table>
-<thead>
-<tr>
-<th>按键</th>
-<th>行为</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Ctrl-d</td>
-<td>删除光标位置的字符。</td>
-</tr>
-<tr>
-<td>Ctrl-t</td>
-<td>光标位置的字符和光标前面的字符互换位置。</td>
-</tr>
-<tr>
-<td>Alt-t</td>
-<td>光标位置的字和其前面的字互换位置。</td>
-</tr>
-<tr>
-<td>Alt-l</td>
-<td>把从光标位置到字尾的字符转换成小写字母。</td>
-</tr>
-<tr>
-<td>Alt-u</td>
-<td>把从光标位置到字尾的字符转换成大写字母。</td>
-</tr>
-</tbody>
-</table>
-<h3 id="剪切和粘贴命令"><a href="#剪切和粘贴命令" class="headerlink" title="剪切和粘贴命令"></a>剪切和粘贴命令</h3><table>
-<thead>
-<tr>
-<th>按键</th>
-<th>行为</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Ctrl-k</td>
-<td>剪切从光标位置到行尾的文本。</td>
-</tr>
-<tr>
-<td>Ctrl-u</td>
-<td>剪切从光标位置到行首的文本。</td>
-</tr>
-<tr>
-<td>Alt-d</td>
-<td>剪切从光标位置到词尾的文本。</td>
-</tr>
-<tr>
-<td>Alt-Backspace</td>
-<td>剪切从光标位置到词头的文本。如果光标在一个单词的开头，剪切前一个单词。</td>
-</tr>
-<tr>
-<td>Ctrl-y</td>
-<td>把剪切环中的文本粘贴到光标位置。</td>
-</tr>
-</tbody>
-</table>
-<h3 id="重新执行命令"><a href="#重新执行命令" class="headerlink" title="重新执行命令"></a>重新执行命令</h3><table>
-<thead>
-<tr>
-<th>按键</th>
-<th>行为</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Ctrl-p</td>
-<td>移动到上一个历史条目。类似于上箭头按键。</td>
-</tr>
-<tr>
-<td>Ctrl-n</td>
-<td>移动到下一个历史条目。类似于下箭头按键。</td>
-</tr>
-<tr>
-<td>Alt-&lt;</td>
-<td>移动到历史列表开头。</td>
-</tr>
-<tr>
-<td>Alt-&gt;</td>
-<td>移动到历史列表结尾，即当前命令行。</td>
-</tr>
-<tr>
-<td>Ctrl-r</td>
-<td>反向递增搜索。从当前命令行开始，向上递增搜索。</td>
-</tr>
-<tr>
-<td>Alt-p</td>
-<td>反向搜索，不是递增顺序。输入要查找的字符串，然后按下 Enter，执行搜索。</td>
-</tr>
-<tr>
-<td>Alt-n</td>
-<td>向前搜索，非递增顺序。</td>
-</tr>
-<tr>
-<td>Ctrl-o</td>
-<td>执行历史列表中的当前项，并移到下一个。如果你想要执行历史列表中一系列的命令，这很方便。</td>
-</tr>
-</tbody>
-</table>
-<h3 id="控制命令"><a href="#控制命令" class="headerlink" title="控制命令"></a>控制命令</h3><table>
-<thead>
-<tr>
-<th>按键</th>
-<th>行为</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Ctrl + l</td>
-<td>清屏</td>
-</tr>
-<tr>
-<td>Ctrl + o</td>
-<td>执行当前命令，并选择上一条命令</td>
-</tr>
-<tr>
-<td>Ctrl + s</td>
-<td>阻止屏幕输出</td>
-</tr>
-<tr>
-<td>Ctrl + q</td>
-<td>允许屏幕输出</td>
-</tr>
-<tr>
-<td>Ctrl + c</td>
-<td>终止命令</td>
-</tr>
-<tr>
-<td>Ctrl + z</td>
-<td>挂起命令</td>
-</tr>
-</tbody>
-</table>
-<h3 id="Bang-命令"><a href="#Bang-命令" class="headerlink" title="Bang (!) 命令"></a>Bang (!) 命令</h3><table>
-<thead>
-<tr>
-<th>按键</th>
-<th>行为</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>!blah:p</td>
-<td>仅打印输出，而不执行</td>
-</tr>
-<tr>
-<td>!$</td>
-<td>上一条命令的最后一个参数，与 Alt + . 相同</td>
-</tr>
-<tr>
-<td>!$:p</td>
-<td>打印输出 !$ 的内容</td>
-</tr>
-<tr>
-<td>!*</td>
-<td>上一条命令的所有参数</td>
-</tr>
-<tr>
-<td>!*:p</td>
-<td>打印输出 !* 的内容</td>
-</tr>
-<tr>
-<td>^blah</td>
-<td>删除上一条命令中的 blah</td>
-</tr>
-<tr>
-<td>^blah^foo</td>
-<td>将上一条命令中的 blah 替换为 foo</td>
-</tr>
-<tr>
-<td>^blah^foo^</td>
-<td>将上一条命令中所有的 blah 都替换为 foo</td>
-</tr>
-<tr>
-<td>!!</td>
-<td>重复最后一次执行的命令。可能按下上箭头按键和 enter 键更容易些。</td>
-</tr>
-<tr>
-<td>!number</td>
-<td>重复历史列表中第 number 行的命令。</td>
-</tr>
-<tr>
-<td>!string</td>
-<td>重复最近历史列表中，以这个字符串开头的命令。</td>
-</tr>
-<tr>
-<td>!?string</td>
-<td>重复最近历史列表中，包含这个字符串的命令。</td>
-</tr>
-</tbody>
-</table>
-<h2 id="Mac-元键"><a href="#Mac-元键" class="headerlink" title="Mac 元键"></a>Mac 元键</h2><p>在 Windows 中 <kbd>Alt</kbd> 成为元键，上述的快捷键都有。同样的在 Mac 中是 <kbd>Option</kbd> ，不过默认情况下在终端中并没有作用，需要如下图所示的设置即可。</p>
-<p><img width="668" alt="2017-12-14 1 58 34" src="https://user-images.githubusercontent.com/24730006/33977746-53c2d3c4-e0d7-11e7-9547-680da820852f.png"></p>
+        <p>使用用 ubuntu 安装 nginx 很简单，直接就两条命令。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install nginx</span><br></pre></td></tr></table></figure>
+<p>然后就会显示如下所示的内容：</p>
+<p><img src="https://user-images.githubusercontent.com/24730006/36289809-061fbada-12fd-11e8-8cde-2a3b3a1a326e.png" alt="image"></p>
+<p>可以看到这里除了几个必要库依赖包（lib*)，还需要安装 <code>nginx</code> <code>nginx-common</code> <code>nginx-core</code>，那么这三个文件都有什么区别？</p>
+<p>简单的使用 <code>apt show package-name</code> 就可以了解包的描述。</p>
+<h2 id="nginx-common-包"><a href="#nginx-common-包" class="headerlink" title="nginx-common 包"></a>nginx-common 包</h2><blockquote>
+<p>This package contains base configuration files used by all versions of<br> nginx.</p>
+</blockquote>
+<p>也就是说这个就是所有 nginx 的配置文件。</p>
+<h2 id="nginx-包"><a href="#nginx-包" class="headerlink" title="nginx 包"></a>nginx 包</h2><blockquote>
+<p>This is a dependency package to install either nginx-core (by default),<br> nginx-full, nginx-light, or nginx-extras.</p>
+</blockquote>
+<p>也就是说是 nginx-core 等的依赖包。</p>
+<p>安装后查看安装内容，其实全部都是 Doc 文档。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ dpkg-query -L nginx</span><br><span class="line">/.</span><br><span class="line">/usr</span><br><span class="line">/usr/share</span><br><span class="line">/usr/share/doc</span><br><span class="line">/usr/share/doc/nginx</span><br><span class="line">/usr/share/doc/nginx/copyright</span><br><span class="line">/usr/share/doc/nginx/changelog.Debian.gz</span><br></pre></td></tr></table></figure>
+<p>那 nginx-full nginx-light nginx-extras 这三者是什么？</p>
+<h2 id="nginx"><a href="#nginx" class="headerlink" title="nginx-*"></a>nginx-*</h2><p>nginx 一个重要的特点就是轻量级、模块化。所谓模块化就是主要的功能很少，添加的功能主要靠各个模块。</p>
+<p>那么 <code>nginx-*</code> 就是含有不同模块的包，使用 <code>apt install nginx</code> 默认安装的是 <code>nginx-core</code> 。</p>
+<p><code>nginx-full</code> 包中默认包含了一下模块。</p>
+<ul>
+<li>标准模块包含了：Core, Access, Auth Basic, Auto Index, Browser, Charset, Empty GIF, FastCGI,Geo, Gzip, Headers, Index, Limit Requests, Limit Zone, Log, Map, Memcached,Proxy, Referer, Rewrite, SCGI, Split Clients, SSI, Upstream, User ID, UWSGI。</li>
+<li>可选模块包含了：Addition, Debug, GeoIP, Gzip Precompression, HTTP Sub, Image Filter, IPv6,RealIP, Stub Status, WebDAV, XSLT。</li>
+<li>邮件相关模块包含了：Mail Core, IMAP, POP3, SMTP, SSL。</li>
+<li>第三方模块包含了：Echo, Upstream Fair Queue, DAV Ext。</li>
+</ul>
+<p>具体如下图</p>
+<p><img src="https://user-images.githubusercontent.com/24730006/36290025-5a11f09e-12fe-11e8-8f6a-9f1813d34a89.png" alt="image"></p>
+<p>那么其它包 <code>nginx-light</code> 等可以直接使用 <code>apt show nginx-light</code> 显示具体内容。</p>
+<h2 id="nginx-版本区别"><a href="#nginx-版本区别" class="headerlink" title="nginx 版本区别"></a>nginx 版本区别</h2><p>如果我们用源码包安装会看到下面几个版本。</p>
+<p><img src="https://user-images.githubusercontent.com/24730006/36290157-eaa56906-12fe-11e8-8872-651b67de44e1.png" alt="image"></p>
+<ul>
+<li>Maintainline 开发版</li>
+<li>Stable 稳定版</li>
+<li>legacy 历史版本</li>
+</ul>
+<p>具体就是其中文含义，在生产环境一般我们使用 Stable 版本。而在 APT 上也是此版本。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/bash-键盘高级操作技巧/" data-id="cjhdid90d0005pwm1z9uzj6vr" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/Debian-APT-Nginx-各个版本的区别/" data-id="cjhdiq03z00054km1unwud48r" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/nginx/">nginx</a></li></ul>
+
     </footer>
   </div>
   
@@ -514,14 +322,14 @@
 
 
   
-    <article id="post-tool/VSCode-一些技巧和快捷键" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-linux/Linux-sed-和-find-命令清单" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2018/05/20/tool/VSCode-一些技巧和快捷键/" class="article-date">
-  <time datetime="2018-05-19T22:38:32.000Z" itemprop="datePublished">2018-05-19</time>
+    <a href="/blog/2018/05/20/linux/Linux-sed-和-find-命令清单/" class="article-date">
+  <time datetime="2018-05-19T22:52:41.000Z" itemprop="datePublished">2018-05-19</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/blog/categories/tool/">tool</a>
+    <a class="article-category-link" href="/blog/categories/Linux/">Linux</a>
   </div>
 
   </div>
@@ -532,7 +340,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/blog/2018/05/20/tool/VSCode-一些技巧和快捷键/">VSCode一些技巧和快捷键</a>
+      <a class="article-title" href="/blog/2018/05/20/linux/Linux-sed-和-find-命令清单/">Linux sed 和 find 命令清单</a>
     </h1>
   
 
@@ -540,39 +348,80 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>VSCode 一些技巧和快捷键</p>
-<h3 id="如何让-VSCode-打开文件始终在新标签页打开？"><a href="#如何让-VSCode-打开文件始终在新标签页打开？" class="headerlink" title="如何让 VSCode 打开文件始终在新标签页打开？"></a>如何让 VSCode 打开文件始终在新标签页打开？</h3><p>VSCode 有一个默认设定，单击一个右侧侧边栏的文件是预览模式，如果不输入任何任何文本就始终保持预览模式。</p>
-<p>预览模式是的打开一个新文件，然后再打开一个新文件，第二个就会占用第一个窗口。详细信息可以查看：<a href="https://code.visualstudio.com/docs/getstarted/userinterface#_preview-mode" target="_blank" rel="noopener">https://code.visualstudio.com/docs/getstarted/userinterface#_preview-mode</a></p>
-<p>文件处于预览模式有个标识，就是标题栏的文件名称是斜体的，</p>
-<p>如何关闭？在设置文件里设置 <code>workbench.editor.enablePreview</code> 为 false 即可，这是全局设置的，每次都是打开新 tab。</p>
-<p>不过还有个简单的方式，那就是<strong>双击新文件</strong>就是不以预览模式打开。如果已经打开，那么<strong>双击标题栏的文件名称</strong>也可以。</p>
-<p>VSCode 已经成为我日常开发必备的编辑器。昨天有写一直困扰我的 #162 新文件打开占用前文件窗口的问题（feature），下文说明个人常用的快捷键。</p>
-<p>官方文档中有<a href="https://code.visualstudio.com/docs/getstarted/tips-and-tricks" target="_blank" rel="noopener">一篇</a>专门说明了这些技巧，比较友好的时候是，文档页面会根据系统类型来显示快捷键。</p>
-<p>下面是一些我常用的，Windows 下的 Ctrl 大多时候相当于 Mac 下 Cmd，以下以 Windows 说明。</p>
-<h3 id="分栏和开闭侧边栏"><a href="#分栏和开闭侧边栏" class="headerlink" title="分栏和开闭侧边栏"></a>分栏和开闭侧边栏</h3><p>一个视口最多分成3个，使用 <code>Ctrl+\</code>，如果我们要切换不同的工作分栏，可以使用 <code>Ctrl+1, Ctrl+2, Ctrl+3</code> 即对应第一、二、三个分栏。</p>
-<p><img src="https://user-images.githubusercontent.com/24730006/37562068-a368bb26-2a99-11e8-9744-9fbf90ba35c3.png" alt="image"></p>
-<p>上图可以看到左侧有个文件列表的侧边栏，如果关闭的话，使用快捷键 <code>Ctrl+b</code>。</p>
-<p>不同分栏有不同的窗口，那么我们可以使用 <code>Ctrl+tab</code> 进行切换，如下图所示。</p>
-<p><img src="https://user-images.githubusercontent.com/24730006/37562213-c10288f2-2a9d-11e8-90b9-a5301d27dea0.png" alt="image"></p>
-<p>还有个前进后退导航的快捷键，比如使用 ctrl+click 进行点击查看函数定义的时候就直接跳转到其定义，返回的时候直接使用 Alt+left  或者 Alt+right 即可，Mac 下是 <code>Opt+-</code> 和 <code>Opt+Shift+-</code>。</p>
-<h3 id="快捷查找"><a href="#快捷查找" class="headerlink" title="快捷查找"></a>快捷查找</h3><p>这里的快捷查找不是 <code>Ctrl+f</code> 的查找功能，这里的快捷查找要比它方便的多。</p>
-<p>有这样一个场景，比如说打开 index.js 后想打开 model.js 那么不需要在侧边栏找，只需要使用 <code>Ctrl+p</code> 需要 model.ljs 这个文件名，然后选择即可。</p>
-<p>值得注意的是，我们还可以使用一些更具体的命令来查找。比如说 <code>:n</code> 转到第 n 行，<code>@</code> 查找相关函数，<code>&gt;</code> 快捷设置。其它的操作符具体如下。</p>
-<p><img src="https://user-images.githubusercontent.com/24730006/37562119-c176e60a-2a9a-11e8-8a72-664912416b28.png" alt="image"></p>
-<h3 id="变量重命名"><a href="#变量重命名" class="headerlink" title="变量重命名"></a>变量重命名</h3><p>初始化变量后，如果想更改名称的话是个头疼的事情，需要把使用这个变量的地方统统修改一遍。不过在 VSCode 里面我们直接使用 <code>F2</code> 即可重命名即可。</p>
-<h3 id="移动和复制代码行"><a href="#移动和复制代码行" class="headerlink" title="移动和复制代码行"></a>移动和复制代码行</h3><p>移动代码行</p>
-<p>Windows 下 <code>Alt+Up</code> 或者 <code>Alt+Down</code>，在Mac 下就是  <code>Opt+↑</code> 和 <code>Opt+↓</code></p>
-<p><img src="https://user-images.githubusercontent.com/24730006/37562232-804b101c-2a9e-11e8-97f5-6b72339e2dc7.png" alt="image"></p>
-<p>复制代码行</p>
-<p>到行前：Ctrl+Alt+Up，到行后：Ctrl+Alt+Down</p>
-<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><p> 多光标选择：在 Windows 下使用 <code>Alt+Click</code> 空白处，Mac 下就是 <code>Opt+Click</code>。撤销上一个选择就是 <code>Ctrl+U</code><br>多行选择：Ctrl+Shfit+上下左右<br>选择当前行：<code>Ctrl+i</code><br>预览Markdown：<code>Ctrl+Shift+v</code><br>折叠代码块：<code>Ctrl+Shift+[</code> 以及 <code>Ctrl+Shift+]</code><br>跳转到开始和结尾：Windows 下是 Ctrl+Home 和 Ctrl+End ，Mac 下就是 <code>Cmd+↑</code> 和 <code>Cmd+↓</code></p>
-
+        <h2 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h2><p>之前在使用 sed 就只在 ubuntu 上替换 apt 源用过。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -i 's/us/cn/g' /etc/apt/sources.lit</span><br></pre></td></tr></table></figure>
+<p>一直还没记住，容易输错，结果经常就把 sources.list 文件破坏掉了 😓。</p>
+<p>sed 是流编辑器，读取一个文件，按照命令每次只处理一行。具体命令如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed [options] &apos;command&apos; file(s)</span><br></pre></td></tr></table></figure>
+<p>option 就是上述命令的 -i 部分，这个是修改源文件。处理行为默认是只输出到屏幕，加 -i 的参数了，这会修改源文件的。有个安全的方式就是使用 <code>-i.bak</code> 的形式先备份然后再修改。</p>
+<p><strong>其它的 option 选项</strong></p>
+<ul>
+<li>-e<script>或–expression=<script>：以选项中的指定的script来处理输入的文本文件；</li>
+<li>-f&lt;script文件&gt;或–file=&lt;script文件&gt;：以选项中指定的script文件来处理输入的文本文件；</li>
+<li>-n或–quiet或——silent：仅显示script处理后的结果；</li>
+<li>-V或–version：显示版本信息。</li>
+</ul>
+<p>command 参数包括两个部分，处理位置和处理方式。</p>
+<p>sed 读取一行处理一行，默认是每行都处理，另外提供了处理位置（Address），可以是行号，也可以是正则只要匹配才处理，不匹配就跳过进入下一行。</p>
+<p>选定行的范围使用 <code>,（逗号）</code>进行。</p>
+<ul>
+<li>所有在模板test和check所确定的范围内的行都被打印：<code>sed -n &#39;/test/,/check/p&#39; file</code></li>
+<li>打印从第5行开始到第一个包含以test开始的行之间的所有行：<code>sed -n &#39;5,/^test/p&#39; file</code></li>
+<li>对于模板test和west之间的行，每行的末尾用字符串aaa bbb替换：<code>sed &#39;/test/,/west/s/$/aaa bbb/&#39; file</code></li>
+</ul>
+<p>在处理位置之后再使用处理方式。</p>
+<p>几个常用的处理方式有新增（a），插入（i），删除（d），打印（p），替换（s）。</p>
+<p><strong>输出打印操作：p命令</strong></p>
+<ul>
+<li>打印第二行：<code>sed -n &#39;2p&#39; file</code></li>
+</ul>
+<p>需要注意的是如果不加 -n 的话，会打印两行。</p>
+<p><strong>删除操作：d命令</strong></p>
+<ul>
+<li>删除空白行：<code>sed &#39;/^$/d&#39; file</code></li>
+<li>删除文件的第2行：<code>sed &#39;2d&#39; file</code></li>
+<li>删除文件的第2行到末尾所有行：<code>sed &#39;2,$d&#39; file</code></li>
+</ul>
+<p><strong>追加（行下）：a\命令</strong></p>
+<ul>
+<li>将 this is a test line 追加到 以test 开头的行后面：<code>sed &#39;/^test/a\this is a test line&#39; file</code></li>
+<li>在 test.conf 文件第2行之后插入：<code>sed -i &#39;2a\this is a test line&#39; test.conf</code></li>
+<li>也可以直接使用在命令<code>a</code>后加空格的形式： <code>sed -i &#39;2a insert new lint&#39;</code></li>
+</ul>
+<p><strong>插入（行上）：i\命令</strong></p>
+<ul>
+<li>将 this is a test line 追加到以test开头的行前面：<code>sed &#39;/^test/i\this is a test line&#39; file</code></li>
+<li>在test.conf文件第5行之前插入：<code>sed -i &#39;5i\this is a test line&#39; test.conf</code></li>
+</ul>
+<p>当然还有最初说的 s 命令是指替换操作，可以直接搭配正规表示法。<code>sed -i &#39;s/us/cn/g&#39; /etc/apt/sources.lit</code> 这条命令就是把 <code>/etc/apt/sources.list</code> 文件中每行的 us 换成 cn，这个就是初始化 ubuntu server 的最常用的命令了。</p>
+<h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><p>Linux find命令用来在指定目录下查找文件。</p>
+<p>任何位于参数之前的字符串都将被视为欲查找的目录名。如果使用该命令时，不设置任何参数，则find命令将在当前目录下查找子目录与文件。并且将查找到的子目录和文件全部进行显示。</p>
+<p>语法格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find   path   -option   [   -print ]   [ -exec   -ok   command ]   &#123;&#125; ;</span><br></pre></td></tr></table></figure>
+<p>find 根据下列规则判断 path 和 expression，在命令列上第一个 <code>- ( ) , !</code>之前的部份为 path，之后的是 expression。如果 path 是空字串则使用目前路径，如果 expression 是空字串则使用 -print 为预设 expression。</p>
+<ul>
+<li>-atime n : 在过去 n 天过读取过的文件</li>
+<li>-ctime n : 在过去 n 天过修改过的文件</li>
+<li>-empty : 空的文件-gid n or -group name : gid 是 n 或是 group 名称是 name</li>
+<li>-name name, -iname name : 文件名称符合 name 的文件。iname 会忽略大小写</li>
+<li>-size n : 文件大小 是 n 单位，b 代表 512 位元组的区块，c 表示字元数，k 表示 kilo bytes，w 是二个位元组。</li>
+<li>-type c : 文件类型是 c 的文件。d: 目录；c: 字型装置文件；b: 区块装置文件；p: 具名贮列；f: 一般文件；l: 符号连结；s: socket</li>
+<li>-pid n : process id 是 n 的文件</li>
+</ul>
+<p>更多可参考：<a href="https://blog.csdn.net/xktxoo/article/details/77823520">https://blog.csdn.net/xktxoo/article/details/77823520</a></p>
+<h2 id="REF"><a href="#REF" class="headerlink" title="REF"></a>REF</h2><ul>
+<li><a href="http://man.linuxde.net/sed">http://man.linuxde.net/sed</a></li>
+<li><a href="http://www.runoob.com/linux/linux-comm-find.html">http://www.runoob.com/linux/linux-comm-find.html</a></li>
+</ul>
+</script></li></ul>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/tool/VSCode-一些技巧和快捷键/" data-id="cjhdid90b0003pwm1qnokro5t" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/Linux-sed-和-find-命令清单/" data-id="cjhdiq04300094km1d0xatii2" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/sed/">sed</a></li></ul>
+
     </footer>
   </div>
   
@@ -584,7 +433,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><a class="page-number" href="/blog/page/3/">3</a><a class="extend next" rel="next" href="/blog/page/2/">Next &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><a class="page-number" href="/blog/page/3/">3</a><a class="page-number" href="/blog/page/4/">4</a><a class="extend next" rel="next" href="/blog/page/2/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -605,7 +454,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/BigInt/">BigInt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES/">ES</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/TypeScript/">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/nodejs/">nodejs</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/BigInt/">BigInt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES/">ES</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/TypeScript/">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/nginx/">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/nodejs/">nodejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/sed/">sed</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a></li></ul>
     </div>
   </div>
 
@@ -615,7 +464,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog/tags/BigInt/" style="font-size: 10px;">BigInt</a> <a href="/blog/tags/ES/" style="font-size: 10px;">ES</a> <a href="/blog/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/blog/tags/nodejs/" style="font-size: 10px;">nodejs</a>
+      <a href="/blog/tags/BigInt/" style="font-size: 10px;">BigInt</a> <a href="/blog/tags/ES/" style="font-size: 10px;">ES</a> <a href="/blog/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/blog/tags/bash/" style="font-size: 10px;">bash</a> <a href="/blog/tags/git/" style="font-size: 20px;">git</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/nginx/" style="font-size: 20px;">nginx</a> <a href="/blog/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/blog/tags/nodejs/" style="font-size: 10px;">nodejs</a> <a href="/blog/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog/tags/ubuntu/" style="font-size: 10px;">ubuntu</a>
     </div>
   </div>
 
@@ -637,23 +486,23 @@
       <ul>
         
           <li>
-            <a href="/blog/2018/05/20/tool/VSCode-代码风格自动校验和格式化清单/">VSCode代码风格自动校验和格式化清单</a>
+            <a href="/blog/2018/05/20/nodejs/函数节流与函数防抖/">函数节流与函数防抖</a>
           </li>
         
           <li>
-            <a href="/blog/2018/05/20/nodejs/密码强度校验：先行断言正则与通用库/">密码强度校验：先行断言正则与通用库</a>
+            <a href="/blog/2018/05/20/nodejs/ES5中数组函数对空位的处理/">ES5中数组函数对空位的处理</a>
           </li>
         
           <li>
-            <a href="/blog/2018/05/20/linux/Ubuntu新建用户并赋予权限清单/">Ubuntu新建用户并赋予权限清单</a>
+            <a href="/blog/2018/05/20/linux/在git中新建一个空白分支/">在git中新建一个空白分支</a>
           </li>
         
           <li>
-            <a href="/blog/2018/05/20/linux/bash-键盘高级操作技巧/">bash 键盘高级操作技巧</a>
+            <a href="/blog/2018/05/20/linux/Debian-APT-Nginx-各个版本的区别/">Debian APT Nginx 各个版本的区别</a>
           </li>
         
           <li>
-            <a href="/blog/2018/05/20/tool/VSCode-一些技巧和快捷键/">VSCode一些技巧和快捷键</a>
+            <a href="/blog/2018/05/20/linux/Linux-sed-和-find-命令清单/">Linux sed 和 find 命令清单</a>
           </li>
         
       </ul>

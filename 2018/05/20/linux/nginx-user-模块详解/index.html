@@ -5,22 +5,23 @@
   
 
   
-  <title>Ubuntu新建用户并赋予权限清单 | Lishude&#39;s Web Note</title>
+  <title>nginx user 模块详解 | Lishude&#39;s Web Note</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="通常新建用户会遇到很多问题，比如 shell 不支持 tab 提示，下述流程解决了常见新建用户出现的问题。 新建用户首先在建立一个用户家目录，一般建立在 /home 下，目录名一般直接使用用户名。接着使用 useradd 命令继续，命令结构如下。 useradd -d HOME-DIR -s /bin/bash -c COMMET -G GOURP-NAME USER-NAME -d 指示用户家目">
-<meta name="keywords" content="ubuntu">
+  <meta name="description" content="nginx 运行后可以指定用户，比如说一个静态网页服务器的文件目录的不同的用户有不同的访问权限，使用 nginx 指定用户就可以有权限对此目录读写。 我其实很好奇怎么直接指定用户的，而且运行nginx的时候也没有需要输入密码之类旳。 在网上查找资料后有以下发现： Nginx 主进程（master process）会以 root 权限运行，之后主进程会读取 /etc/nginx/nginx.conf">
+<meta name="keywords" content="nginx">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Ubuntu新建用户并赋予权限清单">
-<meta property="og:url" content="https://islishude.github.io/blog/2018/05/20/linux/Ubuntu新建用户并赋予权限清单/index.html">
+<meta property="og:title" content="nginx user 模块详解">
+<meta property="og:url" content="https://islishude.github.io/blog/2018/05/20/linux/nginx-user-模块详解/index.html">
 <meta property="og:site_name" content="Lishude&#39;s Web Note">
-<meta property="og:description" content="通常新建用户会遇到很多问题，比如 shell 不支持 tab 提示，下述流程解决了常见新建用户出现的问题。 新建用户首先在建立一个用户家目录，一般建立在 /home 下，目录名一般直接使用用户名。接着使用 useradd 命令继续，命令结构如下。 useradd -d HOME-DIR -s /bin/bash -c COMMET -G GOURP-NAME USER-NAME -d 指示用户家目">
+<meta property="og:description" content="nginx 运行后可以指定用户，比如说一个静态网页服务器的文件目录的不同的用户有不同的访问权限，使用 nginx 指定用户就可以有权限对此目录读写。 我其实很好奇怎么直接指定用户的，而且运行nginx的时候也没有需要输入密码之类旳。 在网上查找资料后有以下发现： Nginx 主进程（master process）会以 root 权限运行，之后主进程会读取 /etc/nginx/nginx.conf">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://user-images.githubusercontent.com/24730006/37553587-2ea56f52-2a06-11e8-82d7-d638abbfe5c9.png">
-<meta property="og:updated_time" content="2018-05-19T14:54:24.346Z">
+<meta property="og:image" content="https://user-images.githubusercontent.com/24730006/33918362-d26099e0-dfed-11e7-9c84-9d9567b2f658.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/24730006/34400643-7f56ac3e-ebce-11e7-8f7a-d5aea792bfbf.png">
+<meta property="og:updated_time" content="2018-05-19T14:54:14.034Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ubuntu新建用户并赋予权限清单">
-<meta name="twitter:description" content="通常新建用户会遇到很多问题，比如 shell 不支持 tab 提示，下述流程解决了常见新建用户出现的问题。 新建用户首先在建立一个用户家目录，一般建立在 /home 下，目录名一般直接使用用户名。接着使用 useradd 命令继续，命令结构如下。 useradd -d HOME-DIR -s /bin/bash -c COMMET -G GOURP-NAME USER-NAME -d 指示用户家目">
-<meta name="twitter:image" content="https://user-images.githubusercontent.com/24730006/37553587-2ea56f52-2a06-11e8-82d7-d638abbfe5c9.png">
+<meta name="twitter:title" content="nginx user 模块详解">
+<meta name="twitter:description" content="nginx 运行后可以指定用户，比如说一个静态网页服务器的文件目录的不同的用户有不同的访问权限，使用 nginx 指定用户就可以有权限对此目录读写。 我其实很好奇怎么直接指定用户的，而且运行nginx的时候也没有需要输入密码之类旳。 在网上查找资料后有以下发现： Nginx 主进程（master process）会以 root 权限运行，之后主进程会读取 /etc/nginx/nginx.conf">
+<meta name="twitter:image" content="https://user-images.githubusercontent.com/24730006/33918362-d26099e0-dfed-11e7-9c84-9d9567b2f658.png">
   
     <link rel="alternate" href="/blog/atom.xml" title="Lishude&#39;s Web Note" type="application/atom+xml">
   
@@ -71,10 +72,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-linux/Ubuntu新建用户并赋予权限清单" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-linux/nginx-user-模块详解" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2018/05/20/linux/Ubuntu新建用户并赋予权限清单/" class="article-date">
-  <time datetime="2018-05-19T22:43:02.000Z" itemprop="datePublished">2018-05-19</time>
+    <a href="/blog/2018/05/20/linux/nginx-user-模块详解/" class="article-date">
+  <time datetime="2018-05-19T22:51:54.000Z" itemprop="datePublished">2018-05-19</time>
 </a>
     
   <div class="article-category">
@@ -89,7 +90,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Ubuntu新建用户并赋予权限清单
+      nginx user 模块详解
     </h1>
   
 
@@ -97,36 +98,44 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>通常新建用户会遇到很多问题，比如 shell 不支持 tab 提示，下述流程解决了常见新建用户出现的问题。</p>
-<h2 id="新建用户"><a href="#新建用户" class="headerlink" title="新建用户"></a>新建用户</h2><p>首先在建立一个用户家目录，一般建立在 <code>/home</code> 下，目录名一般直接使用用户名。接着使用 <code>useradd</code> 命令继续，命令结构如下。</p>
-<p><code>useradd -d HOME-DIR -s /bin/bash -c COMMET -G GOURP-NAME USER-NAME</code></p>
-<p><code>-d</code> 指示用户家目录，使用刚才新建的目录即可。<code>-c</code> 指定注释。</p>
-<p><code>-s</code> 指定 shell，默认是不指定的，一定要加上，要不然就会出现上述说的问题。</p>
-<p> <code>-G</code> 指定用户组，之后也可以使用 <code>usermod -aG GROUP-NAME USER-NAME</code> 进行添加。</p>
-<p>最后再加上用户名称即可。</p>
-<p>值得注意的是 <code>-p</code> 可以指定登录密码，但是我尝试过没有成功。还有一个方式指定密码，使用 <code>passwd USER-NAME</code> 即可。</p>
-<p>详细的参数在文后有说明。然后给用户家目录赋权</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chown -R user:group /home/user</span><br><span class="line">sudo chmod -R 770 /home/user</span><br></pre></td></tr></table></figure>
-<p>最后复制shell模板到家目录</p>
-<p><code>sudo /etc/skel/.bashrc /home/user</code></p>
-<h2 id="root-权限"><a href="#root-权限" class="headerlink" title="root 权限"></a>root 权限</h2><p>编辑 <code>/etc/sudoers</code> </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># User privilege specification</span><br><span class="line">root	ALL=(ALL:ALL) ALL</span><br><span class="line">user  ALL=(ALL:ALL) ALL</span><br></pre></td></tr></table></figure>
-<p>之前提及过 usermod 可以把用户添加到用户组，在 <code>/etc/sudoers</code> 后有说明将用户添加 <code>sudo</code> 组就可以使用 <code>sudo</code> 命令获取管理权限，在 CentOS上通常是 wheel 组而不是 sudo 组。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Allow members of group sudo to execute any command</span><br><span class="line">%sudo	ALL=(ALL:ALL) ALL</span><br></pre></td></tr></table></figure>
-<p>第一个“ALL”表示该规则适用于所有主机，第二个表示root用户可以像所有用户一样运行命令，第三个表示root用户可以像所有组一样运行命令，最后一个“ALL”表示这些规则适用于所有命令。详情可参考<a href="https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos" target="_blank" rel="noopener">这里</a>。</p>
-<p>如果已经在命令中设置将新用户加入 root sudo 用户组的，以上的规则设定也可以不用。</p>
-<p>最后退出当前用户，重新使用新用户登录试一试吧！</p>
-<h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><p>更简单的命令，直接会创建用户家目录以及将 .bashrc 等文件移动到用户家目录。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd --create-home username</span><br></pre></td></tr></table></figure>
-<h2 id="useradd-命令清单"><a href="#useradd-命令清单" class="headerlink" title="useradd 命令清单"></a>useradd 命令清单</h2><p><img width="649" alt="2018-03-17 5 10 34" src="https://user-images.githubusercontent.com/24730006/37553587-2ea56f52-2a06-11e8-82d7-d638abbfe5c9.png"></p>
+        <p>nginx 运行后可以指定用户，比如说一个静态网页服务器的文件目录的不同的用户有不同的访问权限，使用 nginx 指定用户就可以有权限对此目录读写。</p>
+<p>我其实很好奇怎么直接指定用户的，而且运行nginx的时候也没有需要输入密码之类旳。</p>
+<p>在网上查找资料后有以下发现：</p>
+<p>Nginx 主进程（master process）会以 root 权限运行，之后主进程会读取 <code>/etc/nginx/nginx.conf</code> 文件中的 user 模块的配置，nginx 会使用这个指定的用户启动工作进程（ worker process）。</p>
+<p>那为什么主进程需要使用 root？因为只有 root 可以监听小于1024的端口号，通常 webserver 使用 80/443 端口，这也就是为什么需要 root 来运行了。如果要更改非root用户来运行，需要更改下面的文件用户和用户组，当然你也就不能使用 &lt;1024 的端口了。 </p>
+<ul>
+<li>error_log</li>
+<li>access_log</li>
+<li>pid</li>
+<li>client_body_temp_path</li>
+<li>fastcgi_temp_path</li>
+<li>proxy_temp_path</li>
+<li>scgi_temp_path</li>
+<li>uwsgi_temp_path</li>
+</ul>
+<p>好了，具体进程运行如下图所示。</p>
+<p><img src="https://user-images.githubusercontent.com/24730006/33918362-d26099e0-dfed-11e7-9c84-9d9567b2f658.png" alt="image"></p>
+<p>这里可以看到 nginx 只有一个主进程和多个工作进程，主进程主要读取和评估配置文件正确性，以及管理工作进程。工作进程是真正的网络请求处理的进程。</p>
+<p>如果主进程使用root运行，那么nginx 将会调用 setuid()/setgid() 去设置 user/group。如果 group 没有特别指定，那么 nginx 会使用 user 相同的名称设置 group。默认为 <code>nobody nogroup</code> 或者安装nginx的时候在  <code>./configure</code> 指定的  <code>--user=USER</code> 和 <code>--group=GROUP</code></p>
+<p><img src="https://user-images.githubusercontent.com/24730006/34400643-7f56ac3e-ebce-11e7-8f7a-d5aea792bfbf.png" alt="image"></p>
+<p><a href="http://nginx.org/en/docs/ngx_core_module.html#user" target="_blank" rel="noopener">配置语法</a>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax: user user [group];</span><br><span class="line">defualt: user nobody nobody;</span><br><span class="line">Context: main</span><br></pre></td></tr></table></figure>
+<p>如果使用了 php 的话，那么同时还需要编辑 <a href="http://php.net/manual/en/install.fpm.configuration.php" target="_blank" rel="noopener">php-fpm.conf</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">; Set permissions for unix socket, if one is used. In Linux, read/write</span><br><span class="line">; permissions must be set in order to allow connections from a web server. Many</span><br><span class="line">; BSD-derived systems allow connections regardless of permissions.</span><br><span class="line">; Default Values: user and group are set as the running user</span><br><span class="line">;                 mode is set to 0660</span><br><span class="line">listen.owner = xxx</span><br><span class="line">listen.group = xxx</span><br><span class="line">;liseten.mode = 0660</span><br></pre></td></tr></table></figure>
+<p>参考：</p>
+<ol>
+<li><a href="https://stackoverflow.com/questions/42329261/running-nginx-as-non-root-user" target="_blank" rel="noopener">Running Nginx as non root user
+</a></li>
+<li><a href="https://serverfault.com/questions/433265/how-do-i-change-the-nginx-user" target="_blank" rel="noopener">How do I change the NGINX user?</a></li>
+</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/Ubuntu新建用户并赋予权限清单/" data-id="cjhdiq046000d4km1fvbj5o72" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/nginx-user-模块详解/" data-id="cjhdiq044000c4km1xaxousgb" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/nginx/">nginx</a></li></ul>
 
     </footer>
   </div>
@@ -134,19 +143,19 @@
     
 <nav id="article-nav">
   
-    <a href="/blog/2018/05/20/nodejs/密码强度校验：先行断言正则与通用库/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/blog/2018/05/20/linux/Linux-sed-和-find-命令清单/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          密码强度校验：先行断言正则与通用库
+          Linux sed 和 find 命令清单
         
       </div>
     </a>
   
   
-    <a href="/blog/2018/05/20/linux/bash-键盘高级操作技巧/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/blog/2018/05/20/tool/VSCode-代码风格自动校验和格式化清单/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">bash 键盘高级操作技巧</div>
+      <div class="article-nav-title">VSCode代码风格自动校验和格式化清单</div>
     </a>
   
 </nav>
