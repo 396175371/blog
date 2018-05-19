@@ -70,6 +70,346 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-linux/bash-键盘高级操作技巧" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/2018/05/20/linux/bash-键盘高级操作技巧/" class="article-date">
+  <time datetime="2018-05-19T22:40:43.000Z" itemprop="datePublished">2018-05-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2018/05/20/linux/bash-键盘高级操作技巧/">bash 键盘高级操作技巧</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="移动光标"><a href="#移动光标" class="headerlink" title="移动光标"></a>移动光标</h3><table>
+<thead>
+<tr>
+<th>按键</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl-a</td>
+<td>移动光标到行首。</td>
+</tr>
+<tr>
+<td>Ctrl-e</td>
+<td>移动光标到行尾。</td>
+</tr>
+<tr>
+<td>Ctrl-f</td>
+<td>光标前移一个字符；和右箭头作用一样。</td>
+</tr>
+<tr>
+<td>Ctrl-b</td>
+<td>光标后移一个字符；和左箭头作用一样。</td>
+</tr>
+<tr>
+<td>Alt-f</td>
+<td>光标前移一个字（word\单词）。</td>
+</tr>
+<tr>
+<td>Alt-b</td>
+<td>光标后移一个字（word\单词）。</td>
+</tr>
+<tr>
+<td>Ctrl-l</td>
+<td>清空屏幕，移动光标到左上角。clear 命令完成同样的工作。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="文本编辑命令"><a href="#文本编辑命令" class="headerlink" title="文本编辑命令"></a>文本编辑命令</h3><table>
+<thead>
+<tr>
+<th>按键</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl-d</td>
+<td>删除光标位置的字符。</td>
+</tr>
+<tr>
+<td>Ctrl-t</td>
+<td>光标位置的字符和光标前面的字符互换位置。</td>
+</tr>
+<tr>
+<td>Alt-t</td>
+<td>光标位置的字和其前面的字互换位置。</td>
+</tr>
+<tr>
+<td>Alt-l</td>
+<td>把从光标位置到字尾的字符转换成小写字母。</td>
+</tr>
+<tr>
+<td>Alt-u</td>
+<td>把从光标位置到字尾的字符转换成大写字母。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="剪切和粘贴命令"><a href="#剪切和粘贴命令" class="headerlink" title="剪切和粘贴命令"></a>剪切和粘贴命令</h3><table>
+<thead>
+<tr>
+<th>按键</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl-k</td>
+<td>剪切从光标位置到行尾的文本。</td>
+</tr>
+<tr>
+<td>Ctrl-u</td>
+<td>剪切从光标位置到行首的文本。</td>
+</tr>
+<tr>
+<td>Alt-d</td>
+<td>剪切从光标位置到词尾的文本。</td>
+</tr>
+<tr>
+<td>Alt-Backspace</td>
+<td>剪切从光标位置到词头的文本。如果光标在一个单词的开头，剪切前一个单词。</td>
+</tr>
+<tr>
+<td>Ctrl-y</td>
+<td>把剪切环中的文本粘贴到光标位置。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="重新执行命令"><a href="#重新执行命令" class="headerlink" title="重新执行命令"></a>重新执行命令</h3><table>
+<thead>
+<tr>
+<th>按键</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl-p</td>
+<td>移动到上一个历史条目。类似于上箭头按键。</td>
+</tr>
+<tr>
+<td>Ctrl-n</td>
+<td>移动到下一个历史条目。类似于下箭头按键。</td>
+</tr>
+<tr>
+<td>Alt-&lt;</td>
+<td>移动到历史列表开头。</td>
+</tr>
+<tr>
+<td>Alt-&gt;</td>
+<td>移动到历史列表结尾，即当前命令行。</td>
+</tr>
+<tr>
+<td>Ctrl-r</td>
+<td>反向递增搜索。从当前命令行开始，向上递增搜索。</td>
+</tr>
+<tr>
+<td>Alt-p</td>
+<td>反向搜索，不是递增顺序。输入要查找的字符串，然后按下 Enter，执行搜索。</td>
+</tr>
+<tr>
+<td>Alt-n</td>
+<td>向前搜索，非递增顺序。</td>
+</tr>
+<tr>
+<td>Ctrl-o</td>
+<td>执行历史列表中的当前项，并移到下一个。如果你想要执行历史列表中一系列的命令，这很方便。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="控制命令"><a href="#控制命令" class="headerlink" title="控制命令"></a>控制命令</h3><table>
+<thead>
+<tr>
+<th>按键</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl + l</td>
+<td>清屏</td>
+</tr>
+<tr>
+<td>Ctrl + o</td>
+<td>执行当前命令，并选择上一条命令</td>
+</tr>
+<tr>
+<td>Ctrl + s</td>
+<td>阻止屏幕输出</td>
+</tr>
+<tr>
+<td>Ctrl + q</td>
+<td>允许屏幕输出</td>
+</tr>
+<tr>
+<td>Ctrl + c</td>
+<td>终止命令</td>
+</tr>
+<tr>
+<td>Ctrl + z</td>
+<td>挂起命令</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Bang-命令"><a href="#Bang-命令" class="headerlink" title="Bang (!) 命令"></a>Bang (!) 命令</h3><table>
+<thead>
+<tr>
+<th>按键</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>!blah:p</td>
+<td>仅打印输出，而不执行</td>
+</tr>
+<tr>
+<td>!$</td>
+<td>上一条命令的最后一个参数，与 Alt + . 相同</td>
+</tr>
+<tr>
+<td>!$:p</td>
+<td>打印输出 !$ 的内容</td>
+</tr>
+<tr>
+<td>!*</td>
+<td>上一条命令的所有参数</td>
+</tr>
+<tr>
+<td>!*:p</td>
+<td>打印输出 !* 的内容</td>
+</tr>
+<tr>
+<td>^blah</td>
+<td>删除上一条命令中的 blah</td>
+</tr>
+<tr>
+<td>^blah^foo</td>
+<td>将上一条命令中的 blah 替换为 foo</td>
+</tr>
+<tr>
+<td>^blah^foo^</td>
+<td>将上一条命令中所有的 blah 都替换为 foo</td>
+</tr>
+<tr>
+<td>!!</td>
+<td>重复最后一次执行的命令。可能按下上箭头按键和 enter 键更容易些。</td>
+</tr>
+<tr>
+<td>!number</td>
+<td>重复历史列表中第 number 行的命令。</td>
+</tr>
+<tr>
+<td>!string</td>
+<td>重复最近历史列表中，以这个字符串开头的命令。</td>
+</tr>
+<tr>
+<td>!?string</td>
+<td>重复最近历史列表中，包含这个字符串的命令。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Mac-元键"><a href="#Mac-元键" class="headerlink" title="Mac 元键"></a>Mac 元键</h2><p>在 Windows 中 <kbd>Alt</kbd> 成为元键，上述的快捷键都有。同样的在 Mac 中是 <kbd>Option</kbd> ，不过默认情况下在终端中并没有作用，需要如下图所示的设置即可。</p>
+<p><img width="668" alt="2017-12-14 1 58 34" src="https://user-images.githubusercontent.com/24730006/33977746-53c2d3c4-e0d7-11e7-9547-680da820852f.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/bash-键盘高级操作技巧/" data-id="cjhdi3cpk0000owm1k14gzcl9" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-tool/VSCode-一些技巧和快捷键" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/2018/05/20/tool/VSCode-一些技巧和快捷键/" class="article-date">
+  <time datetime="2018-05-19T22:38:32.000Z" itemprop="datePublished">2018-05-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/tool/">tool</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2018/05/20/tool/VSCode-一些技巧和快捷键/">VSCode一些技巧和快捷键</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>VSCode 一些技巧和快捷键</p>
+<h3 id="如何让-VSCode-打开文件始终在新标签页打开？"><a href="#如何让-VSCode-打开文件始终在新标签页打开？" class="headerlink" title="如何让 VSCode 打开文件始终在新标签页打开？"></a>如何让 VSCode 打开文件始终在新标签页打开？</h3><p>VSCode 有一个默认设定，单击一个右侧侧边栏的文件是预览模式，如果不输入任何任何文本就始终保持预览模式。</p>
+<p>预览模式是的打开一个新文件，然后再打开一个新文件，第二个就会占用第一个窗口。详细信息可以查看：<a href="https://code.visualstudio.com/docs/getstarted/userinterface#_preview-mode" target="_blank" rel="noopener">https://code.visualstudio.com/docs/getstarted/userinterface#_preview-mode</a></p>
+<p>文件处于预览模式有个标识，就是标题栏的文件名称是斜体的，</p>
+<p>如何关闭？在设置文件里设置 <code>workbench.editor.enablePreview</code> 为 false 即可，这是全局设置的，每次都是打开新 tab。</p>
+<p>不过还有个简单的方式，那就是<strong>双击新文件</strong>就是不以预览模式打开。如果已经打开，那么<strong>双击标题栏的文件名称</strong>也可以。</p>
+<p>VSCode 已经成为我日常开发必备的编辑器。昨天有写一直困扰我的 #162 新文件打开占用前文件窗口的问题（feature），下文说明个人常用的快捷键。</p>
+<p>官方文档中有<a href="https://code.visualstudio.com/docs/getstarted/tips-and-tricks" target="_blank" rel="noopener">一篇</a>专门说明了这些技巧，比较友好的时候是，文档页面会根据系统类型来显示快捷键。</p>
+<p>下面是一些我常用的，Windows 下的 Ctrl 大多时候相当于 Mac 下 Cmd，以下以 Windows 说明。</p>
+<h3 id="分栏和开闭侧边栏"><a href="#分栏和开闭侧边栏" class="headerlink" title="分栏和开闭侧边栏"></a>分栏和开闭侧边栏</h3><p>一个视口最多分成3个，使用 <code>Ctrl+\</code>，如果我们要切换不同的工作分栏，可以使用 <code>Ctrl+1, Ctrl+2, Ctrl+3</code> 即对应第一、二、三个分栏。</p>
+<p><img src="https://user-images.githubusercontent.com/24730006/37562068-a368bb26-2a99-11e8-9744-9fbf90ba35c3.png" alt="image"></p>
+<p>上图可以看到左侧有个文件列表的侧边栏，如果关闭的话，使用快捷键 <code>Ctrl+b</code>。</p>
+<p>不同分栏有不同的窗口，那么我们可以使用 <code>Ctrl+tab</code> 进行切换，如下图所示。</p>
+<p><img src="https://user-images.githubusercontent.com/24730006/37562213-c10288f2-2a9d-11e8-90b9-a5301d27dea0.png" alt="image"></p>
+<p>还有个前进后退导航的快捷键，比如使用 ctrl+click 进行点击查看函数定义的时候就直接跳转到其定义，返回的时候直接使用 Alt+left  或者 Alt+right 即可，Mac 下是 <code>Opt+-</code> 和 <code>Opt+Shift+-</code>。</p>
+<h3 id="快捷查找"><a href="#快捷查找" class="headerlink" title="快捷查找"></a>快捷查找</h3><p>这里的快捷查找不是 <code>Ctrl+f</code> 的查找功能，这里的快捷查找要比它方便的多。</p>
+<p>有这样一个场景，比如说打开 index.js 后想打开 model.js 那么不需要在侧边栏找，只需要使用 <code>Ctrl+p</code> 需要 model.ljs 这个文件名，然后选择即可。</p>
+<p>值得注意的是，我们还可以使用一些更具体的命令来查找。比如说 <code>:n</code> 转到第 n 行，<code>@</code> 查找相关函数，<code>&gt;</code> 快捷设置。其它的操作符具体如下。</p>
+<p><img src="https://user-images.githubusercontent.com/24730006/37562119-c176e60a-2a9a-11e8-8a72-664912416b28.png" alt="image"></p>
+<h3 id="变量重命名"><a href="#变量重命名" class="headerlink" title="变量重命名"></a>变量重命名</h3><p>初始化变量后，如果想更改名称的话是个头疼的事情，需要把使用这个变量的地方统统修改一遍。不过在 VSCode 里面我们直接使用 <code>F2</code> 即可重命名即可。</p>
+<h3 id="移动和复制代码行"><a href="#移动和复制代码行" class="headerlink" title="移动和复制代码行"></a>移动和复制代码行</h3><p>移动代码行</p>
+<p>Windows 下 <code>Alt+Up</code> 或者 <code>Alt+Down</code>，在Mac 下就是  <code>Opt+↑</code> 和 <code>Opt+↓</code></p>
+<p><img src="https://user-images.githubusercontent.com/24730006/37562232-804b101c-2a9e-11e8-97f5-6b72339e2dc7.png" alt="image"></p>
+<p>复制代码行</p>
+<p>到行前：Ctrl+Alt+Up，到行后：Ctrl+Alt+Down</p>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><p> 多光标选择：在 Windows 下使用 <code>Alt+Click</code> 空白处，Mac 下就是 <code>Opt+Click</code>。撤销上一个选择就是 <code>Ctrl+U</code><br>多行选择：Ctrl+Shfit+上下左右<br>选择当前行：<code>Ctrl+i</code><br>预览Markdown：<code>Ctrl+Shift+v</code><br>折叠代码块：<code>Ctrl+Shift+[</code> 以及 <code>Ctrl+Shift+]</code><br>跳转到开始和结尾：Windows 下是 Ctrl+Home 和 Ctrl+End ，Mac 下就是 <code>Cmd+↑</code> 和 <code>Cmd+↓</code></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://islishude.github.io/blog/2018/05/20/tool/VSCode-一些技巧和快捷键/" data-id="cjhdi3cq5000jowm1caaxq9oy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-nodejs/用-JS-和-Go-来实现中英文简单排版" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog/2018/05/20/nodejs/用-JS-和-Go-来实现中英文简单排版/" class="article-date">
@@ -116,7 +456,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/用-JS-和-Go-来实现中英文简单排版/" data-id="cjhdhw3p90008vwm1i1qp3hjm" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/用-JS-和-Go-来实现中英文简单排版/" data-id="cjhdi3cq2000gowm16z1r8app" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/golang/">golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/nodejs/">nodejs</a></li></ul>
@@ -172,7 +512,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/十行代码将-Nodejs-fs-模块转换无回调（promisify）形式/" data-id="cjhdhw3p70006vwm11514spi2" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/十行代码将-Nodejs-fs-模块转换无回调（promisify）形式/" data-id="cjhdi3cq1000eowm1smgic88y" class="article-share-link">Share</a>
       
       
     </footer>
@@ -243,7 +583,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/golang/Go语言结构体和JSON序列化/" data-id="cjhdhw3ow0000vwm1ner2hqkd" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/golang/Go语言结构体和JSON序列化/" data-id="cjhdi3cpv0006owm19wbff154" class="article-share-link">Share</a>
       
       
     </footer>
@@ -314,7 +654,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/为什么-git-pull-会修改文件权限和所属用户以及用户组？/" data-id="cjhdhw3pd000dvwm1ug08b8zc" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/为什么-git-pull-会修改文件权限和所属用户以及用户组？/" data-id="cjhdi3cpo0001owm12ph5w73d" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/git/">git</a></li></ul>
@@ -385,7 +725,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/golang/Go-语言延迟调用和错误处理/" data-id="cjhdhw3p40003vwm1xg5wxdi5" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/golang/Go-语言延迟调用和错误处理/" data-id="cjhdi3cpt0005owm1ejlvrzra" class="article-share-link">Share</a>
       
       
     </footer>
@@ -444,7 +784,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/不常见的-NPM-包管理技巧/" data-id="cjhdhw3p60005vwm1lwi7xbue" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/不常见的-NPM-包管理技巧/" data-id="cjhdi3cpy000bowm1qvazxj81" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Node-js/">Node.js</a></li></ul>
@@ -501,7 +841,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/JS-BigInt-尝鲜/" data-id="cjhdhw3p10001vwm1abqyg73f" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/JS-BigInt-尝鲜/" data-id="cjhdi3cps0003owm1niyprjf6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/BigInt/">BigInt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/ES/">ES</a></li></ul>
@@ -555,7 +895,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/TypeScript-导入-JSON-Module/" data-id="cjhdhw3pa000avwm154otgrqx" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/TypeScript-导入-JSON-Module/" data-id="cjhdi3cpw0008owm1le39jm9i" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/TypeScript/">TypeScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/node-js/">node.js</a></li></ul>
@@ -577,7 +917,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Node-js/">Node.js</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Node-js/">Node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/tool/">tool</a></li></ul>
     </div>
   </div>
 
@@ -619,6 +959,14 @@
       <ul>
         
           <li>
+            <a href="/blog/2018/05/20/linux/bash-键盘高级操作技巧/">bash 键盘高级操作技巧</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2018/05/20/tool/VSCode-一些技巧和快捷键/">VSCode一些技巧和快捷键</a>
+          </li>
+        
+          <li>
             <a href="/blog/2018/05/20/nodejs/用-JS-和-Go-来实现中英文简单排版/">用 JS 和 Go 来实现中英文简单排版</a>
           </li>
         
@@ -628,14 +976,6 @@
         
           <li>
             <a href="/blog/2018/05/20/golang/Go语言结构体和JSON序列化/">Go语言结构体和JSON序列化</a>
-          </li>
-        
-          <li>
-            <a href="/blog/2018/05/20/linux/为什么-git-pull-会修改文件权限和所属用户以及用户组？/">为什么 git pull 会修改文件权限和所属用户以及用户组？</a>
-          </li>
-        
-          <li>
-            <a href="/blog/2018/05/20/golang/Go-语言延迟调用和错误处理/">Go 语言延迟调用和错误处理</a>
           </li>
         
       </ul>
