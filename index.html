@@ -70,6 +70,176 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-tool/VSCode-代码风格自动校验和格式化清单" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/2018/05/20/tool/VSCode-代码风格自动校验和格式化清单/" class="article-date">
+  <time datetime="2018-05-19T22:44:40.000Z" itemprop="datePublished">2018-05-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/tool/">tool</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2018/05/20/tool/VSCode-代码风格自动校验和格式化清单/">VSCode代码风格自动校验和格式化清单</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>vscode 提供了很多优秀的插件，对于代码风格校验和代码格式化，我最常用的是 eslint 和 prettier，eslint 自不必说，第二个是代码格式化插件，不仅可以对 js html css 格式化，还可以对 sass 以及 json 等进行格式化。</p>
+<p>当然格式化的标准编辑器不太同意，比如函数表达式中函数名后面带空格与否，prettier 默认的是不带空格，不过团队中常用的是 JS Standard 是有空格的，更别提字符串用双引号还是单引号，表达式后面跟不跟分号这样的风格差异的问题了。</p>
+<p>不过还好的是 eslint 和 prettier 二者可以结合自动对代码进行格式化。</p>
+<p>首先，在 vscode 市场安装 eslint 和 prettier 两个插件。</p>
+<p>然后我们需要在项目中再安装 eslint 的包。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yarn add eslint --dev</span><br><span class="line">npm i -D eslint</span><br></pre></td></tr></table></figure>
+<p>eslint 提示的是也可以全局安装，<del>但是我全局安装之后并没有作用</del>，必须使用 npm 而不是 yarn 安装才可以。我觉得为了团队其他人的更简单使用，建议还是在 package.json 中安装 eslint。</p>
+<p>打开 vscode 的设置，mac下是 code -&gt; 首选项 -&gt; 设置，windows下是 文件 -&gt; 首选项 -&gt; 设置，在搜索设置中更改下列配置。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;  </span><br><span class="line">  <span class="attr">"eslint.validate"</span>: [</span><br><span class="line">    <span class="string">"javascript"</span>,</span><br><span class="line">    <span class="string">"javascriptreact"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">"editor.formatOnSave"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"prettier.eslintIntegration"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"eslint.autoFixOnSave"</span>: <span class="literal">true</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对 JS 进行检查，我们需要对添加 eslint 设置，首先添加 <code>.eslintrc.js</code> ，这里添加 <code>standard</code> 风格，更多可以在 eslint 网站查看。这里我们使用命令行自动生成，运行<code>eslint --init</code>，然后选择 <code>Use a popular style guide</code> 按照提示操作，如下可做参考。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">? How would you like to configure ESLint? Use a popular style guide</span><br><span class="line">? Which style guide do you want to follow? Standard</span><br><span class="line">? What format do you want your config file to be in? JavaScript</span><br><span class="line">Checking peerDependencies of eslint-config-standard@latest</span><br><span class="line">Installing eslint-config-standard@latest, eslint-plugin-import@&gt;=2.2.0, eslint-plugin-node@&gt;=4.2.2, eslint-plugin-promise@&gt;=3.5.0, eslint-plugin-standard@&gt;=3.0.0</span><br><span class="line">npm notice created a lockfile as package-lock.json. You should commit this file.</span><br><span class="line">npm WARN eslint-config-standard@10.2.1 requires a peer of eslint@&gt;=3.19.0 but none is installed. You must install peer dependencies yourself.</span><br><span class="line">npm WARN eslint-plugin-standard@3.0.1 requires a peer of eslint@&gt;=3.19.0 but none is installed. You must install peer dependencies yourself.</span><br><span class="line">npm WARN eslint-plugin-node@5.2.1 requires a peer of eslint@&gt;=3.1.0 but none is installed. You must install peer dependencies yourself.</span><br><span class="line">npm WARN eslint-plugin-import@2.8.0 requires a peer of eslint@2.x - 4.x but none is installed. You must install peer dependencies yourself.</span><br><span class="line"></span><br><span class="line">+ eslint-config-standard@10.2.1</span><br><span class="line">+ eslint-plugin-standard@3.0.1</span><br><span class="line">+ eslint-plugin-promise@3.6.0</span><br><span class="line">+ eslint-plugin-node@5.2.1</span><br><span class="line">+ eslint-plugin-import@2.8.0</span><br><span class="line">added 53 packages in 9.873s</span><br><span class="line">Successfully created .eslintrc.js file in C:\Users\Lishude\Desktop\project\express</span><br></pre></td></tr></table></figure>
+<p>这样我们在项目中只要 <code>Ctrl+s</code> 就可以自动格式了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://islishude.github.io/blog/2018/05/20/tool/VSCode-代码风格自动校验和格式化清单/" data-id="cjhdia4ab0005i4m1u0l3z70y" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-nodejs/密码强度校验：先行断言正则与通用库" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/2018/05/20/nodejs/密码强度校验：先行断言正则与通用库/" class="article-date">
+  <time datetime="2018-05-19T22:43:49.000Z" itemprop="datePublished">2018-05-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Node-js/">Node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2018/05/20/nodejs/密码强度校验：先行断言正则与通用库/">密码强度校验：先行断言正则与通用库</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在用户注册业务场景中，一般而言的用户密码强度：密码至少8个字符，包括1个大写字母，1个小写字母和1个数字或特殊字符。本文原本转载来自<a href="http://www.css88.com/archives/8100" target="_blank" rel="noopener">css88</a>的一篇整理，但是其内容只是简单说明了几种验证密码强度正则的写法，比如说 <code>/^(?=.*\d)(?=.*[a-zA-Z]).{6,20}$/</code> ，这里用了「先行断言」，之前自己对此理解不太准确，本文就是附带讲解这个概念来一步一步说明密码强度正则的写法。</p>
+<h2 id="先行断言"><a href="#先行断言" class="headerlink" title="先行断言"></a>先行断言</h2><p>先行断言（Positive look-ahead）的语法形式为 <code>x(?=y)</code>，意思就是 x 只有在 y 前面才匹配，并且 y 不会被计入返回结果。</p>
+<p>如果要匹配一个 70% 中的数字，就可以写成 <code>/\d+(?=%)/</code>。</p>
+<p>先行断言很容易让人误解，比如说上面举例的密码强度表达式（<code>/^(?=.*\d)(?=.*[a-zA-Z]).{6,20}$/</code>）中的先行断言前面并没有任何字符，它其实<strong>只是匹配某些位置不占用字符</strong>，所以匹配返回的内容是不包括先行断言内的内容的。</p>
+<p>下面使用 JavaScript 具体说明：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> res = <span class="regexp">/(?=\d)[a-z]/</span>.test(<span class="string">"1h"</span>)</span><br></pre></td></tr></table></figure>
+<p>那么<code>res</code> 的返回结果是？肯定有人说是 <code>true</code> 但是正确结果为 <code>false</code>。</p>
+<p>接下来来分析一下，想象一个指针在字符串 <code>1h</code> 上移动，那么根据上面例子的正则，指针会在 <code>1h</code> 之前，用下划线指代指针的话，指针的位置就是 <code>_1h</code> 的，但是 <code>(?=\d)[a-z]</code> 要求后面的字符是不是数字而是小写字母，所以就匹配不了。</p>
+<p>那么，我们稍微修改一下，现在就匹配了。也就是说<strong>断言不消耗字符</strong>，如果找不到断言就不匹配。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/(?=\d)\d[a-z]/.test(<span class="string">"1h"</span>)</span><br></pre></td></tr></table></figure>
+<p>那么再说明密码强度的正则就简单了。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&amp;])[A-Za-z\d$@$!%*#?&amp;]&#123;6,&#125;$/</span><br></pre></td></tr></table></figure>
+<p>在断言中加入 <code>.</code> 代表任意字符，那么就是匹配整个密码字符串。</p>
+<h2 id="密码强度库"><a href="#密码强度库" class="headerlink" title="密码强度库"></a>密码强度库</h2><p>除了正则之外，还有一个业界通用的密码强度库 Dropbox 的 <a href="https://github.com/dropbox/zxcvbn" target="_blank" rel="noopener">zxcvbn</a>。</p>
+<p>库名字很好记就是键盘字符第三排的字母，另外根据统计取这样密码的用户很多。</p>
+<p>zxcvbn 覆盖了所有主流的语言，包括 JS PHP Python 等，前端也可以直接引入，不过我并不推荐，因为包太大了，足有 800K。如果前端使用的话，最好还是使用正则。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/密码强度校验：先行断言正则与通用库/" data-id="cjhdia4an000ji4m1mskz6ktb" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-linux/Ubuntu新建用户并赋予权限清单" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/2018/05/20/linux/Ubuntu新建用户并赋予权限清单/" class="article-date">
+  <time datetime="2018-05-19T22:43:02.000Z" itemprop="datePublished">2018-05-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2018/05/20/linux/Ubuntu新建用户并赋予权限清单/">Ubuntu新建用户并赋予权限清单</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>通常新建用户会遇到很多问题，比如 shell 不支持 tab 提示，下述流程解决了常见新建用户出现的问题。</p>
+<h2 id="新建用户"><a href="#新建用户" class="headerlink" title="新建用户"></a>新建用户</h2><p>首先在建立一个用户家目录，一般建立在 <code>/home</code> 下，目录名一般直接使用用户名。接着使用 <code>useradd</code> 命令继续，命令结构如下。</p>
+<p><code>useradd -d HOME-DIR -s /bin/bash -c COMMET -G GOURP-NAME USER-NAME</code></p>
+<p><code>-d</code> 指示用户家目录，使用刚才新建的目录即可。<code>-c</code> 指定注释。</p>
+<p><code>-s</code> 指定 shell，默认是不指定的，一定要加上，要不然就会出现上述说的问题。</p>
+<p> <code>-G</code> 指定用户组，之后也可以使用 <code>usermod -aG GROUP-NAME USER-NAME</code> 进行添加。</p>
+<p>最后再加上用户名称即可。</p>
+<p>值得注意的是 <code>-p</code> 可以指定登录密码，但是我尝试过没有成功。还有一个方式指定密码，使用 <code>passwd USER-NAME</code> 即可。</p>
+<p>详细的参数在文后有说明。然后给用户家目录赋权</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chown -R user:group /home/user</span><br><span class="line">sudo chmod -R 770 /home/user</span><br></pre></td></tr></table></figure>
+<p>最后复制shell模板到家目录</p>
+<p><code>sudo /etc/skel/.bashrc /home/user</code></p>
+<h2 id="root-权限"><a href="#root-权限" class="headerlink" title="root 权限"></a>root 权限</h2><p>编辑 <code>/etc/sudoers</code> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># User privilege specification</span><br><span class="line">root	ALL=(ALL:ALL) ALL</span><br><span class="line">user  ALL=(ALL:ALL) ALL</span><br></pre></td></tr></table></figure>
+<p>之前提及过 usermod 可以把用户添加到用户组，在 <code>/etc/sudoers</code> 后有说明将用户添加 <code>sudo</code> 组就可以使用 <code>sudo</code> 命令获取管理权限，在 CentOS上通常是 wheel 组而不是 sudo 组。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Allow members of group sudo to execute any command</span><br><span class="line">%sudo	ALL=(ALL:ALL) ALL</span><br></pre></td></tr></table></figure>
+<p>第一个“ALL”表示该规则适用于所有主机，第二个表示root用户可以像所有用户一样运行命令，第三个表示root用户可以像所有组一样运行命令，最后一个“ALL”表示这些规则适用于所有命令。详情可参考<a href="https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos" target="_blank" rel="noopener">这里</a>。</p>
+<p>如果已经在命令中设置将新用户加入 root sudo 用户组的，以上的规则设定也可以不用。</p>
+<p>最后退出当前用户，重新使用新用户登录试一试吧！</p>
+<h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><p>更简单的命令，直接会创建用户家目录以及将 .bashrc 等文件移动到用户家目录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd --create-home username</span><br></pre></td></tr></table></figure>
+<h2 id="useradd-命令清单"><a href="#useradd-命令清单" class="headerlink" title="useradd 命令清单"></a>useradd 命令清单</h2><p><img width="649" alt="2018-03-17 5 10 34" src="https://user-images.githubusercontent.com/24730006/37553587-2ea56f52-2a06-11e8-82d7-d638abbfe5c9.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/Ubuntu新建用户并赋予权限清单/" data-id="cjhdia4a90003i4m1fqgg74vo" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-linux/bash-键盘高级操作技巧" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog/2018/05/20/linux/bash-键盘高级操作技巧/" class="article-date">
@@ -334,7 +504,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/bash-键盘高级操作技巧/" data-id="cjhdi3cpk0000owm1k14gzcl9" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/bash-键盘高级操作技巧/" data-id="cjhdia4ah000ci4m1zhcu35jg" class="article-share-link">Share</a>
       
       
     </footer>
@@ -400,7 +570,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/tool/VSCode-一些技巧和快捷键/" data-id="cjhdi3cq5000jowm1caaxq9oy" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/tool/VSCode-一些技巧和快捷键/" data-id="cjhdia4aa0004i4m1lm2sl05j" class="article-share-link">Share</a>
       
       
     </footer>
@@ -456,7 +626,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/用-JS-和-Go-来实现中英文简单排版/" data-id="cjhdi3cq2000gowm16z1r8app" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/用-JS-和-Go-来实现中英文简单排版/" data-id="cjhdia4ap000mi4m1ntzz1xns" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/golang/">golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/nodejs/">nodejs</a></li></ul>
@@ -512,7 +682,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/十行代码将-Nodejs-fs-模块转换无回调（promisify）形式/" data-id="cjhdi3cq1000eowm1smgic88y" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/十行代码将-Nodejs-fs-模块转换无回调（promisify）形式/" data-id="cjhdia4b4001fi4m1rzq6uqzv" class="article-share-link">Share</a>
       
       
     </footer>
@@ -583,7 +753,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/golang/Go语言结构体和JSON序列化/" data-id="cjhdi3cpv0006owm19wbff154" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/golang/Go语言结构体和JSON序列化/" data-id="cjhdia4a60001i4m1ym60him3" class="article-share-link">Share</a>
       
       
     </footer>
@@ -654,7 +824,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/为什么-git-pull-会修改文件权限和所属用户以及用户组？/" data-id="cjhdi3cpo0001owm12ph5w73d" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/为什么-git-pull-会修改文件权限和所属用户以及用户组？/" data-id="cjhdia4ae0007i4m1upy6a8ye" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/git/">git</a></li></ul>
@@ -725,7 +895,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/golang/Go-语言延迟调用和错误处理/" data-id="cjhdi3cpt0005owm1ejlvrzra" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/golang/Go-语言延迟调用和错误处理/" data-id="cjhdia4a20000i4m1dptyerc9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -735,179 +905,12 @@
 
 
   
-    <article id="post-nodejs/不常见的-NPM-包管理技巧" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog/2018/05/20/nodejs/不常见的-NPM-包管理技巧/" class="article-date">
-  <time datetime="2018-05-19T22:23:06.000Z" itemprop="datePublished">2018-05-19</time>
-</a>
+
+
+  <nav id="page-nav">
     
-  <div class="article-category">
-    <a class="article-category-link" href="/blog/categories/Node-js/">Node.js</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog/2018/05/20/nodejs/不常见的-NPM-包管理技巧/">不常见的 NPM 包管理技巧</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>除了使用 npmjs.com 这个集中包托管网站，npm 还可以使用 Git 和本地包来安装。</p>
-<p>和正常的 npm install package-name 语法一样，只不过下面的 package-name 全部换成了 url。</p>
-<h2 id="使用-Git-包"><a href="#使用-Git-包" class="headerlink" title="使用 Git 包"></a>使用 Git 包</h2><p>官方在文档里定义的 url 的格式是 <code>&lt;protocol&gt;://[&lt;user&gt;[:&lt;password&gt;]@]&lt;hostname&gt;[:&lt;port&gt;][:][/]&lt;path&gt;[#&lt;commit-ish&gt; | #semver:&lt;semver&gt;]</code></p>
-<p>其中 <code>&lt;protocol&gt;</code> 可以是 <code>git</code>，<code>git+ssh</code>，<code>git+http</code>，<code>git+https</code>，或者 <code>git+file</code>。而 <code>#&lt;commit-ish&gt;</code> 可以选择 commit 的点，<code>#semver:&lt;semver&gt;</code> 是选择 tag 并且支持语义化版本，如此以来我们不用发布到 npm 也能使用包了！在 Golang 中就是这样这样进行包管理，不过知道 Go 1.10 还没有确定的版本管理方案。这里官方文档并没有说明可以使用 branch，其实是可以的，具体可以参考下述的格式示例。</p>
-<p>如果没有使用 <code>commit-ish</code> 或者 <code>semver</code> 会直接使用 master 分支，最后使用 <code>npm install git-url</code> 安装即可， package.json 新增了一些包名称字段，这些名称就是相应包中 package.json 定义的 name 字段：</p>
-<p>各种格式示例如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&quot;dependencies&quot;: &#123;</span><br><span class="line">    // semver(by tag)</span><br><span class="line">    &quot;random.ts&quot;: &quot;git+https://github.com/isLishude/random.ts.git#semver:^2.0.0&quot;,</span><br><span class="line">    // branch</span><br><span class="line">    &quot;random.ts&quot;: &quot;git+ssh://git@github.com/isLishude/random.ts.git#dev&quot;,</span><br><span class="line">     // master</span><br><span class="line">    &quot;random.ts&quot;: &quot;git+ssh://git@github.com/isLishude/random.ts.git&quot;,</span><br><span class="line">     // commit-ish</span><br><span class="line">    &quot;random.ts&quot;: &quot;git+ssh://git@github.com/isLishude/random.ts.git#9d22109491&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果是 GitHub 的话更简单了，安装命令直接使用 <code>npm install username/repository</code> 就可以了，也可以使用 branch 以及 semver tag。</p>
-<h2 id="使用本地包"><a href="#使用本地包" class="headerlink" title="使用本地包"></a>使用本地包</h2><p><code>require</code> 引用当前项目的其它文件需要使用相对路径的地址，如果层级关系太多，就会写很多 <code>../</code>，有一种本地包的方式可以很好的解决。</p>
-<p>配置很简单，类似当前项目一样，新建一个用于当前项目的包目录并且包括 <code>package.json</code> 文件，如本项目所示，在本项目 <code>helper</code> 目录下定义 <code>local-helper</code> 包。</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"local-helper"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">"local heleper functions"</span>,</span><br><span class="line">  <span class="attr">"main"</span>: <span class="string">"index.js"</span>,</span><br><span class="line">  <span class="attr">"license"</span>: <span class="string">"ISC"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后在项目使用 <code>npm install file:package-path</code> 就可以了，例如此项目就使用 <code>npm install file:./helper</code>。最后就可以看到在 <code>package.json</code> 文件 <code>dependencies</code> 字段新增了 <code>&quot;local-helper&quot;: &quot;file:helper&quot;</code> 。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">"dependencies": &#123;</span><br><span class="line">    "local-helper": "file:helper"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><ul>
-<li><a href="https://github.com/adesight/npm-import-url" target="_blank" rel="noopener">https://github.com/adesight/npm-import-url</a></li>
-</ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://docs.npmjs.com/files/package.json#urls-as-dependencies" target="_blank" rel="noopener">https://docs.npmjs.com/files/package.json#urls-as-dependencies</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/不常见的-NPM-包管理技巧/" data-id="cjhdi3cpy000bowm1qvazxj81" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Node-js/">Node.js</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-nodejs/JS-BigInt-尝鲜" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog/2018/05/20/nodejs/JS-BigInt-尝鲜/" class="article-date">
-  <time datetime="2018-05-19T22:20:54.000Z" itemprop="datePublished">2018-05-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog/categories/Node-js/">Node.js</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog/2018/05/20/nodejs/JS-BigInt-尝鲜/">JS BigInt 尝鲜</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>JavaScript 所有数字内部都是 Double64 类型，所以数值的精度最多只能到 53 个二进制位，大于这个范围的整数是无法精确表示的。</p>
-<p><img width="456" alt="2018-05-01 10 09 59" src="https://user-images.githubusercontent.com/24730006/39458512-d661b1a8-4d27-11e8-805c-01b5fd3a060f.png"></p>
-<p>在很多金融场景如果使用 JS 的话就得使用一些 BigNumber 库。其中以太坊 web3.js 使用的是最为流行的是 <a href="https://github.com/MikeMcl/bignumber.js" target="_blank" rel="noopener">bignumber.js</a>，并且包含 <code>.d.ts</code> 类型提示，推荐在生产环境使用。</p>
-<p>因为这些库表示大数的方式是以 16 进制字符串表示的，通常在实践中还需要使用 <code>Buffer.from()</code> 转换成二进制对象，还是有很多不方便，需要写很多辅助函数。不过以后我们就可以使用官方标准库中的 BigInt 了。</p>
-<p>目前（2018年5月1日）BigInt 提案已经进入 TC39 stage 3，不过还是被 V8 引擎提前实现，本文所有代码示例基于 Chrome Canary  68.0.3415.0，如下图所示。</p>
-<p><img width="518" alt="2018-05-01 9 10 04" src="https://user-images.githubusercontent.com/24730006/39457635-ba564466-4d21-11e8-9d91-f1cab5e5854e.png"></p>
-<p>BigInt 表示没有精度和大小限制的整数，为了兼容性考虑，在数字后面添加后缀<code>n</code> 和普通数字类型区分，使用二进制八进制和十六进制也可以表示。</p>
-<p><img width="380" alt="2018-05-01 9 49 05" src="https://user-images.githubusercontent.com/24730006/39458122-ee49152a-4d24-11e8-9397-34397d74197b.png"></p>
-<p>数字的字符串形式可以类似于 <code>Number()</code> 使用 <code>BigInt()</code> 直接转换为 BigInt，需要注意的是参数检查和 Number() 是一致的，是不能使用 <code>123n</code> 字符串形式的参数，不过提案中还有一个静态函数 <code>BigInt.paseInt()</code> 目前V8 还没支持。</p>
-<p><img width="466" alt="2018-05-01 9 48 07" src="https://user-images.githubusercontent.com/24730006/39458109-cba3ee14-4d24-11e8-8de2-e17606b12df6.png"></p>
-<p>BitInt 除了不能和 number 类型直接运算之外，其它方面和普通的数值运算没有多少区别，除法运算始终返回整数形式。</p>
-<p><img width="523" alt="2018-05-01 9 46 51" src="https://user-images.githubusercontent.com/24730006/39458079-9dae0a3a-4d24-11e8-9959-6286c065cf6b.png"></p>
-<p>BigInt 也存在隐式转换，在相等运算符<code>==</code>、不同类型运算以及强制类型转化函数，都还存在 JS 远古传统。</p>
-<p><img width="510" alt="2018-05-01 9 51 43" src="https://user-images.githubusercontent.com/24730006/39458223-8cffd2e4-4d25-11e8-9550-9b3d8165b20f.png"></p>
-<p>更多内容可以参考 <a href="https://github.com/tc39/proposal-bigint" target="_blank" rel="noopener">BigInt 提案</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/JS-BigInt-尝鲜/" data-id="cjhdi3cps0003owm1niyprjf6" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/BigInt/">BigInt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/ES/">ES</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-nodejs/TypeScript-导入-JSON-Module" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog/2018/05/20/nodejs/TypeScript-导入-JSON-Module/" class="article-date">
-  <time datetime="2018-05-19T21:15:26.000Z" itemprop="datePublished">2018-05-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog/categories/Node-js/">Node.js</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog/2018/05/20/nodejs/TypeScript-导入-JSON-Module/">TypeScript 导入 JSON Module</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这是我在知乎问题 <a href="https://www.zhihu.com/question/276172039/answer/393798011" target="_blank" rel="noopener">Typescript有什么冷门但是很好用的特性?</a> 的回答。</p>
-<p>Node.js 模块是允许直接导入 JSON 文件的，但是 ES Module 现在还不支持，TS 在 2.9 （18年5月17日还未发布）之前也不支持。日常中使用 JSON 最多的场景就是 配置文件了，如果要使用的话需要使用下面一些 trick 来支持。</p>
-<p>这里有个 JSON 文件</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"//"</span>: <span class="string">"student.json"</span>,</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"test"</span>,</span><br><span class="line">  <span class="attr">"age"</span>: <span class="number">23</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果需要导入的话，需要先定义类型。</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// student.d.ts</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> "*student.json" &#123;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">interface</span> IStudent &#123;</span><br><span class="line">    name: <span class="built_in">string</span>;</span><br><span class="line">    age: <span class="built_in">number</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">const</span> student: IStudent</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里使用 <code>*student.json</code> 是因为导入的时候有路径符号，这里要用 <code>*</code> 匹配。</p>
-<p>最后在 tsconfig.json 文件中包含这些类型定义文件。</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"//"</span>: <span class="string">"tsconfig.json"</span>,</span><br><span class="line">  <span class="attr">"include"</span>: [<span class="string">"src/**/*"</span>, <span class="string">"./myTypes/*.d.ts"</span>],</span><br><span class="line">  <span class="attr">"exclude"</span>: [<span class="string">"node_modules"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>现在我们就可以直接在文件中引入了，TS 会智能的提示类型。</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; log &#125; <span class="keyword">from</span> <span class="string">"console"</span>;</span><br><span class="line"><span class="comment">// 路径为 `./student.json` </span></span><br><span class="line"><span class="comment">// 所以上面声明模块时用了通配符 `declare module "*student.json"`</span></span><br><span class="line"><span class="keyword">import</span> &#123; student &#125; <span class="keyword">from</span> <span class="string">"./student.json"</span>;</span><br><span class="line"></span><br><span class="line">log(student.age);</span><br><span class="line">log(student.name);</span><br></pre></td></tr></table></figure>
-<p><a href="https://github.com/Microsoft/TypeScript/wiki/Roadmap#29-may-2018" target="_blank" rel="noopener">TypeScript 2.9</a> 即将发布，到时候就可以直接使用 JsonModule 了。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/TypeScript-导入-JSON-Module/" data-id="cjhdi3cpw0008owm1le39jm9i" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/TypeScript/">TypeScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/node-js/">node.js</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
+    <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><a class="extend next" rel="next" href="/blog/page/2/">Next &raquo;</a>
+  </nav>
 
 </section>
         
@@ -959,23 +962,23 @@
       <ul>
         
           <li>
+            <a href="/blog/2018/05/20/tool/VSCode-代码风格自动校验和格式化清单/">VSCode代码风格自动校验和格式化清单</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2018/05/20/nodejs/密码强度校验：先行断言正则与通用库/">密码强度校验：先行断言正则与通用库</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2018/05/20/linux/Ubuntu新建用户并赋予权限清单/">Ubuntu新建用户并赋予权限清单</a>
+          </li>
+        
+          <li>
             <a href="/blog/2018/05/20/linux/bash-键盘高级操作技巧/">bash 键盘高级操作技巧</a>
           </li>
         
           <li>
             <a href="/blog/2018/05/20/tool/VSCode-一些技巧和快捷键/">VSCode一些技巧和快捷键</a>
-          </li>
-        
-          <li>
-            <a href="/blog/2018/05/20/nodejs/用-JS-和-Go-来实现中英文简单排版/">用 JS 和 Go 来实现中英文简单排版</a>
-          </li>
-        
-          <li>
-            <a href="/blog/2018/05/20/nodejs/十行代码将-Nodejs-fs-模块转换无回调（promisify）形式/">十行代码将 Nodejs fs 模块转换无回调（promisify）形式</a>
-          </li>
-        
-          <li>
-            <a href="/blog/2018/05/20/golang/Go语言结构体和JSON序列化/">Go语言结构体和JSON序列化</a>
           </li>
         
       </ul>
