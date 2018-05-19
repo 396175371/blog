@@ -70,6 +70,64 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-nodejs/用-JS-和-Go-来实现中英文简单排版" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/2018/05/20/nodejs/用-JS-和-Go-来实现中英文简单排版/" class="article-date">
+  <time datetime="2018-05-19T22:33:13.000Z" itemprop="datePublished">2018-05-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Node-js/">Node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2018/05/20/nodejs/用-JS-和-Go-来实现中英文简单排版/">用 JS 和 Go 来实现中英文简单排版</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>业界最为标准的中英文排版格式，中文和英文之间加空格，中文和数字之间加空格。现在微信（安卓 6.6.2 测试版）已经支持。</p>
+<p><img width="421" alt="2018-01-27 6 45 38" src="https://user-images.githubusercontent.com/24730006/35471319-d05c82ac-0393-11e8-8c54-7b621d2ce4d8.png"></p>
+<p>原理其实这个很简单，就是匹配相连接的中文和英文（包括数字），然后在中间加一个空格即可。接下来用 JS 和 Golang 实现。需要注意的是已经符合排版的就不需要加空格了。</p>
+<p>匹配中文是用的 <code>[\u4e00-\u9fa5]</code>，一般而言的中文就都涵盖。</p>
+<h2 id="Go-实现"><a href="#Go-实现" class="headerlink" title="Go 实现"></a>Go 实现</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"regexp"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    s := <span class="string">"我是渣渣辉，我是zhangjiahui，zhangjiahui 是我"</span></span><br><span class="line">    g1 := regexp.MustCompile(<span class="string">"([\u4e00-\u9fa5])(\\w)"</span>)</span><br><span class="line">    g2 := regexp.MustCompile(<span class="string">"(\\w)([\u4e00-\u9fa5])"</span>)</span><br><span class="line">    s = g2.ReplaceAllString(g1.ReplaceAllString(s, <span class="string">"$1 $2"</span>), <span class="string">"$1 $2"</span>)</span><br><span class="line">    <span class="comment">// 输出："我是渣渣辉，我是 zhangjiahui，zhangjiahui 是我"</span></span><br><span class="line">    fmt.Println(s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="JS-实现"><a href="#JS-实现" class="headerlink" title="JS 实现"></a>JS 实现</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> s = <span class="string">"我是渣渣辉，我是zhangjiahui，zhangjiahui 是我"</span>;</span><br><span class="line"><span class="keyword">const</span> g1 = <span class="regexp">/(\w)([\u4e00-\u9fa5])/g</span>;</span><br><span class="line"><span class="keyword">const</span> g2 = <span class="regexp">/([\u4e00-\u9fa5])(\w)/g</span>;</span><br><span class="line"><span class="comment">// 输出："我是渣渣辉，我是 zhangjiahui，zhangjiahui 是我"</span></span><br><span class="line">s = s.replace(g1,<span class="string">"$1 $2"</span>).replace(g2,<span class="string">"$1 $2"</span>);</span><br></pre></td></tr></table></figure>
+<p>这里需要注意的是大部分常用的中文都可以匹配到，因为超出了 <code>\uffff</code> 所以部分生僻的中文还匹配不到，可以按照需要进行扩增。JS 因为使用 UTF-16 编码，再使用的时候需要再加上 <code>u</code> 修饰符，例如如 <code>/\u{20BB7}/u.test(&#39;𠮷&#39;)</code>。</p>
+<p>原文首发在我的 <a href="https://github.com/isLishude/blog/issues/156" target="_blank" rel="noopener">GitHub 博客</a></p>
+<h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><p>看到一篇文章，<a href="https://zhuanlan.zhihu.com/p/33335629" target="_blank" rel="noopener">JavaScript 正则表达式匹配汉字</a>，这里需要修改一下正则，最近有一个新的 ES 提案中包含了一个 <a href="https://github.com/tc39/proposal-regexp-unicode-property-escapes" target="_blank" rel="noopener">unicode 转义</a>，语法为 <code>\p{…}</code>。Chrome 64 已经支持，兼容处理可以使用<code>@babel/plugin-proposal-unicode-property-regex</code> 和 <code>regexpu-core</code> 。</p>
+<p>所以正则可以修改为 <code>/(\p{Unified_Ideograph})(\w)/gu</code>。</p>
+<p>以前没接触过这个正则语法，Go 是已经支持了这种语法，所以 Go 的正则也需要改成这个。</p>
+<p>不过我尝试了 <code>Unified_Ideograph</code> 这个就报错了，需要修改为 <code>Han</code> 就可以了。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g1 := regexp.MustCompile(<span class="string">"(\\p&#123;Han&#125;)(\\w)"</span>)</span><br><span class="line">g2 := regexp.MustCompile(<span class="string">"(\\w)(\\p&#123;Han&#125;)"</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="更新二"><a href="#更新二" class="headerlink" title="更新二"></a>更新二</h2><p>上述有个问题，<code>\w</code> 匹配任意的字母、数字和<strong>下划线</strong>，相当于<code>[A-Za-z0-9_]</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> g = <span class="regexp">/(\p&#123;Unified_Ideograph&#125;)([A-Za-z0-9])|([A-Za-z0-9])(\p&#123;Unified_Ideograph&#125;)/gu</span></span><br><span class="line"><span class="keyword">let</span> s = <span class="string">"apple iphone 6s是2016年由us设计在cn 的 fushikang制造"</span></span><br><span class="line"></span><br><span class="line">s = s.replace(g, <span class="function"><span class="keyword">function</span> (<span class="params">match, $<span class="number">1</span>, $<span class="number">2</span>, $<span class="number">3</span>, $<span class="number">4</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> res = $<span class="number">3</span> &amp;&amp; $<span class="number">4</span> ? $<span class="number">3</span> + <span class="string">" "</span> + $<span class="number">4</span> : $<span class="number">1</span> + <span class="string">" "</span> + $<span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(s)</span><br></pre></td></tr></table></figure>
+<p>这里也改进了正则只需要使用一个，需要注意的是，那么使用替换原则的话，后面的组匹配是在第一二个匹配之后，所以要使用 <code>$3, $4</code>。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/用-JS-和-Go-来实现中英文简单排版/" data-id="cjhdhw3p90008vwm1i1qp3hjm" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/golang/">golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/nodejs/">nodejs</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-nodejs/十行代码将-Nodejs-fs-模块转换无回调（promisify）形式" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog/2018/05/20/nodejs/十行代码将-Nodejs-fs-模块转换无回调（promisify）形式/" class="article-date">
@@ -114,7 +172,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/十行代码将-Nodejs-fs-模块转换无回调（promisify）形式/" data-id="cjhdhrx4s000busm17m5ksby8" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/十行代码将-Nodejs-fs-模块转换无回调（promisify）形式/" data-id="cjhdhw3p70006vwm11514spi2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -185,7 +243,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/golang/Go语言结构体和JSON序列化/" data-id="cjhdhrx4m0003usm1cuybt924" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/golang/Go语言结构体和JSON序列化/" data-id="cjhdhw3ow0000vwm1ner2hqkd" class="article-share-link">Share</a>
       
       
     </footer>
@@ -256,7 +314,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/为什么-git-pull-会修改文件权限和所属用户以及用户组？/" data-id="cjhdhrx4i0001usm1875lfa1y" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/linux/为什么-git-pull-会修改文件权限和所属用户以及用户组？/" data-id="cjhdhw3pd000dvwm1ug08b8zc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/git/">git</a></li></ul>
@@ -327,7 +385,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/golang/Go-语言延迟调用和错误处理/" data-id="cjhdhrx4d0000usm12buqy8hp" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/golang/Go-语言延迟调用和错误处理/" data-id="cjhdhw3p40003vwm1xg5wxdi5" class="article-share-link">Share</a>
       
       
     </footer>
@@ -386,7 +444,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/不常见的-NPM-包管理技巧/" data-id="cjhdhrx4p0006usm13d9s9br7" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/不常见的-NPM-包管理技巧/" data-id="cjhdhw3p60005vwm1lwi7xbue" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Node-js/">Node.js</a></li></ul>
@@ -443,7 +501,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/JS-BigInt-尝鲜/" data-id="cjhdhrx4o0005usm1h17w7mln" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/JS-BigInt-尝鲜/" data-id="cjhdhw3p10001vwm1abqyg73f" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/BigInt/">BigInt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/ES/">ES</a></li></ul>
@@ -497,7 +555,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/TypeScript-导入-JSON-Module/" data-id="cjhdhrx4q0008usm1r63i1a85" class="article-share-link">Share</a>
+      <a data-url="https://islishude.github.io/blog/2018/05/20/nodejs/TypeScript-导入-JSON-Module/" data-id="cjhdhw3pa000avwm154otgrqx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/TypeScript/">TypeScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/node-js/">node.js</a></li></ul>
@@ -529,7 +587,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/BigInt/">BigInt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES/">ES</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/TypeScript/">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/node-js/">node.js</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/BigInt/">BigInt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES/">ES</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/TypeScript/">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/nodejs/">nodejs</a></li></ul>
     </div>
   </div>
 
@@ -539,7 +597,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog/tags/BigInt/" style="font-size: 10px;">BigInt</a> <a href="/blog/tags/ES/" style="font-size: 10px;">ES</a> <a href="/blog/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/node-js/" style="font-size: 10px;">node.js</a>
+      <a href="/blog/tags/BigInt/" style="font-size: 10px;">BigInt</a> <a href="/blog/tags/ES/" style="font-size: 10px;">ES</a> <a href="/blog/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/blog/tags/nodejs/" style="font-size: 10px;">nodejs</a>
     </div>
   </div>
 
@@ -561,6 +619,10 @@
       <ul>
         
           <li>
+            <a href="/blog/2018/05/20/nodejs/用-JS-和-Go-来实现中英文简单排版/">用 JS 和 Go 来实现中英文简单排版</a>
+          </li>
+        
+          <li>
             <a href="/blog/2018/05/20/nodejs/十行代码将-Nodejs-fs-模块转换无回调（promisify）形式/">十行代码将 Nodejs fs 模块转换无回调（promisify）形式</a>
           </li>
         
@@ -574,10 +636,6 @@
         
           <li>
             <a href="/blog/2018/05/20/golang/Go-语言延迟调用和错误处理/">Go 语言延迟调用和错误处理</a>
-          </li>
-        
-          <li>
-            <a href="/blog/2018/05/20/nodejs/不常见的-NPM-包管理技巧/">不常见的 NPM 包管理技巧</a>
           </li>
         
       </ul>
