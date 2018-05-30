@@ -239,9 +239,10 @@
 <p>之后就可以啦！打开首页要求输入 admin 的密码，之后登录需要注意默认的邮箱是 <a href="mailto:`admin@example.com" target="_blank" rel="noopener">`admin@example.com</a>`.</p>
 <p><img src="https://user-images.githubusercontent.com/24730006/33828817-8b77684c-dea8-11e7-81fd-8977f4d0025f.png" alt="image"></p>
 <h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ul>
-<li style="list-style: none"><input type="checkbox"> ssh 问题</li>
+<li style="list-style: none"><input type="checkbox" checked> ssh 问题</li>
 </ul>
-
+<p>添加这行到 gitlab.rb ，定义 git ssh 端口，同时在服务器开启这个端口的访问权限。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># git ssh config</span><br><span class="line">gitlab_rails[&apos;gitlab_shell_ssh_port&apos;] = 2222</span><br></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
