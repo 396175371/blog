@@ -5,19 +5,20 @@
   
 
   
-  <title>Tag: bash | Lishude&#39;s Web Note</title>
+  <title>理解ES6中的字符串和数值解构赋值 | Lishude&#39;s Web Note</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="李书德的网络日志，本博客使用用“保持署名—非商用”创意共享4.0许可证，转载只要保持原作者署名和非商用。">
+  <meta name="description" content="ES6 允许从数组和对象中提取值，然后对变量进行赋值，这种“模式匹配”被称为解构。 123456789let [a, b, c] = [2, 3, 4];//也就是let a = 2;let b = 3;let c = 4;let &amp;#123; foo, bar &amp;#125; = &amp;#123; foo: &quot;aaa&quot;, bar: &quot;bbb&quot; &amp;#125;;//let &amp;#123; foo: foo,">
 <meta name="keywords" content="blog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Lishude&#39;s Web Note">
-<meta property="og:url" content="https://islishude.github.io/blog/tags/bash/index.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解ES6中的字符串和数值解构赋值">
+<meta property="og:url" content="https://islishude.github.io/blog/2018/06/04/nodejs/理解ES6中的字符串和数值解构赋值/index.html">
 <meta property="og:site_name" content="Lishude&#39;s Web Note">
-<meta property="og:description" content="李书德的网络日志，本博客使用用“保持署名—非商用”创意共享4.0许可证，转载只要保持原作者署名和非商用。">
+<meta property="og:description" content="ES6 允许从数组和对象中提取值，然后对变量进行赋值，这种“模式匹配”被称为解构。 123456789let [a, b, c] = [2, 3, 4];//也就是let a = 2;let b = 3;let c = 4;let &amp;#123; foo, bar &amp;#125; = &amp;#123; foo: &quot;aaa&quot;, bar: &quot;bbb&quot; &amp;#125;;//let &amp;#123; foo: foo,">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:updated_time" content="2018-06-03T23:39:39.229Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Lishude&#39;s Web Note">
-<meta name="twitter:description" content="李书德的网络日志，本博客使用用“保持署名—非商用”创意共享4.0许可证，转载只要保持原作者署名和非商用。">
+<meta name="twitter:title" content="理解ES6中的字符串和数值解构赋值">
+<meta name="twitter:description" content="ES6 允许从数组和对象中提取值，然后对变量进行赋值，这种“模式匹配”被称为解构。 123456789let [a, b, c] = [2, 3, 4];//也就是let a = 2;let b = 3;let c = 4;let &amp;#123; foo, bar &amp;#125; = &amp;#123; foo: &quot;aaa&quot;, bar: &quot;bbb&quot; &amp;#125;;//let &amp;#123; foo: foo,">
   
     <link rel="alternate" href="/blog/atom.xml" title="Lishude&#39;s Web Note" type="application/atom+xml">
   
@@ -68,40 +69,60 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog/2018/05/20/linux/bash-键盘高级操作技巧/" class="archive-article-date">
-  <time datetime="2018-05-19T22:40:43.000Z" itemprop="datePublished">5月 19</time>
+        <section id="main"><article id="post-nodejs/理解ES6中的字符串和数值解构赋值" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/2018/06/04/nodejs/理解ES6中的字符串和数值解构赋值/" class="article-date">
+  <time datetime="2018-06-04T07:39:17.000Z" itemprop="datePublished">2018-06-04</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Node-js/">Node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog/2018/05/20/linux/bash-键盘高级操作技巧/">bash 键盘高级操作技巧</a>
+    <h1 class="article-title" itemprop="name">
+      理解ES6中的字符串和数值解构赋值
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>ES6 允许从数组和对象中提取值，然后对变量进行赋值，这种“模式匹配”被称为解构。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [a, b, c] = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">//也就是</span></span><br><span class="line"><span class="keyword">let</span> a = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">let</span> b = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">let</span> c = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123; foo, bar &#125; = &#123; <span class="attr">foo</span>: <span class="string">"aaa"</span>, <span class="attr">bar</span>: <span class="string">"bbb"</span> &#125;;</span><br><span class="line"><span class="comment">//let &#123; foo: foo, bar: bar &#125; = &#123; foo: "aaa", bar: "bbb" &#125;;</span></span><br></pre></td></tr></table></figure>
+<p>当等号右边不是数组或者对象，类如字符串、数值、布尔值会被转换成了一个类似数组的对象，这些对象都有一个<code>length</code>属性，因此还可以对这个属性解构赋值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123;<span class="attr">length</span> : len&#125; = <span class="string">'he'</span>;</span><br><span class="line">len <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+<p>上面的字符串<code>hello</code>会先转化为<code>new String(&#39;he&#39;)</code>包装对象，所以会有<code>length</code>、<code>toString</code>等属性或方法，所以如果要理解这个的话可以把上述转化为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> hello = <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">'he'</span>);</span><br><span class="line"><span class="keyword">let</span> &#123;<span class="attr">length</span>: len&#125; =  &#123;<span class="number">0</span>: <span class="string">"h"</span>, <span class="number">1</span>: <span class="string">"e"</span>, <span class="attr">length</span>: <span class="number">2</span>,<span class="attr">__proto__</span>: <span class="built_in">String</span>&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://islishude.github.io/blog/2018/06/04/nodejs/理解ES6中的字符串和数值解构赋值/" data-id="cjhzgyh24001bd0m17rkicav8" class="article-share-link">Share</a>
+      
+      
+    </footer>
   </div>
-</article>
+  
+    
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/blog/2018/06/01/linux/AngularJS-Git-提交信息规范/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">AngularJS Git 提交信息规范</div>
+    </a>
   
+</nav>
 
+  
+</article>
 
 </section>
         
